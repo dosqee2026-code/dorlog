@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Form Laporan HanLog — DORLOG</title>
+<style>
+:root {
+  --hijau-tua: #1A4731;
+  --hijau-mid: #2D6A4F;
+  --hijau-muda: #D8F3DC;
+  --biru-tua: #1F3864;
+  --biru-muda: #D6E4F0;
+  --kuning: #FFD166;
+  --kuning-muda: #FFF8E1;
+  --merah: #C1121F;
+  --merah-muda: #FFE5E5;
+  --abu-terang: #F8F9FA;
+  --abu-mid: #E9ECEF;
+  --abu-tua: #6C757D;
+  --teks: #212529;
+  --putih: #FFFFFF;
+  --border: #CED4DA;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+  background: #EEF2F0;
+  color: var(--teks);
+  font-size: 15px;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* HEADER */
+.header {
+  background: var(--hijau-tua);
+  color: var(--putih);
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.header h1 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.header p { font-size: 11px; opacity: 0.75; margin-top: 3px; }
+.header-row2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.jam-display { font-size: 12px; opacity: 0.8; }
+.deadline-badge {
+  background: var(--kuning);
+  color: #7F5000;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.deadline-badge.lewat {
+  background: #FFB3B3;
+  color: #8B0000;
+}
+
+/* MAIN */
+.main { padding: 14px 12px 80px; max-width: 600px; margin: 0 auto; }
+
+/* PANDUAN */
+.panduan {
+  background: var(--kuning-muda);
+  border-left: 4px solid #E6A817;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #5C4000;
+  line-height: 1.7;
+}
+.panduan strong { display: block; font-size: 13px; margin-bottom: 6px; }
+
+/* CARD */
+.card {
+  background: var(--putih);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-top: 4px solid var(--hijau-mid);
+}
+.card.biru-card { border-top-color: var(--biru-tua); }
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--hijau-tua);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-title.biru { color: var(--biru-tua); }
+
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 14px;
+}
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--abu-tua);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 5px;
+}
+label .wajib { color: var(--merah); margin-left: 2px; }
+label .satuan {
+  font-weight: 400;
+  color: #999;
+  text-transform: none;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* INPUT — ukuran besar untuk jari */
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 16px; /* 16px mencegah zoom otomatis di Safari iOS */
+  font-family: inherit;
+  color: var(--teks);
+  background: var(--putih);
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--hijau-mid);
+  box-shadow: 0 0 0 3px rgba(45,106,79,0.15);
+}
+input.auto {
+  background: #EEF4F0;
+  color: var(--hijau-tua);
+  font-weight: 700;
+  border-color: #B7D9C4;
+}
+input.error, select.error { border-color: var(--merah) !important; }
+input.ok, select.ok { border-color: var(--hijau-mid) !important; }
+
+/* SELECT arrow custom */
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: "▼";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--abu-tua);
+  pointer-events: none;
+}
+.select-wrap select { padding-right: 36px; }
+
+textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+
+.hint {
+  font-size: 11px;
+  color: var(--abu-tua);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.hint.merah { color: var(--merah); font-weight: 600; }
+
+/* STATUS BADGE */
+.status-wrap { margin-top: 2px; }
+.status-badge {
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.s-AMAN    { background: var(--hijau-muda); color: var(--hijau-tua); }
+.s-WASPADA { background: #FFF3CD; color: #7F5000; }
+.s-MINUS   { background: #FFE5CC; color: #8B3A00; }
+.s-KRITIS  { background: var(--merah-muda); color: var(--merah); }
+.s-default { background: var(--abu-mid); color: var(--abu-tua); }
+
+/* LOGBASE BLOCK */
+.logbase-block {
+  border: 2px solid #B7D9C4;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 14px;
+  background: #FAFFFD;
+}
+.logbase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--abu-mid);
+}
+.logbase-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hijau-tua);
+}
+
+/* TK BLOCK */
+.tk-block {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--abu-terang);
+}
+.tk-block.kritis { border-color: var(--merah); background: #FFF8F8; }
+.tk-block.minus  { border-color: #FF8800; background: #FFF8F0; }
+.tk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.tk-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--biru-tua);
+  background: var(--biru-muda);
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+/* TOMBOL */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+  transition: background 0.15s;
+  text-align: center;
+}
+.btn-hijau { background: var(--hijau-mid); color: var(--putih); }
+.btn-biru  { background: var(--biru-tua);  color: var(--putih); }
+.btn-abu   { background: var(--abu-mid);   color: var(--teks);  }
+.btn-merah-outline {
+  background: transparent;
+  border: 1.5px solid var(--merah);
+  color: var(--merah);
+  font-size: 12px;
+  padding: 6px 12px;
+}
+.btn-full  { width: 100%; margin-bottom: 10px; }
+.btn-tambah {
+  width: 100%;
+  background: transparent;
+  border: 2px dashed var(--hijau-mid);
+  color: var(--hijau-mid);
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+}
+.btn-tambah.biru {
+  border-color: var(--biru-tua);
+  color: var(--biru-tua);
+}
+.btn-row { margin-top: 16px; display: flex; gap: 10px; }
+.btn-row .btn { flex: 1; }
+
+/* OUTPUT */
+.output-box {
+  display: none;
+  background: var(--hijau-tua);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.output-box h3 { color: var(--putih); font-size: 14px; margin-bottom: 10px; }
+.output-text {
+  background: #0D2B1C;
+  border-radius: 6px;
+  padding: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: #A8E6BF;
+  max-height: 350px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.output-btn-row { display: flex; gap: 10px; margin-top: 12px; }
+.btn-copy {
+  flex: 1;
+  background: var(--kuning);
+  color: #5C4000;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+}
+.output-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* PESAN */
+.pesan {
+  display: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+.pesan.error { background: var(--merah-muda); color: var(--merah); border-left: 4px solid var(--merah); }
+.pesan.ok    { background: var(--hijau-muda); color: var(--hijau-tua); border-left: 4px solid var(--hijau-mid); }
+
+/* Divider */
+hr { border: none; border-top: 1.5px solid var(--abu-mid); margin: 14px 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🪖 DORLOG — Laporan Ketahanan Logistik</h1>
+  <p>Diisi oleh Kallan / Perwira Logistik Satuan</p>
+  <div class="header-row2">
+    <span class="jam-display" id="jam-display">--:--</span>
+    <span class="deadline-badge" id="deadline-badge">⏰ Deadline: 18.00 WIB</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PANDUAN -->
+  <div class="panduan">
+    <strong>📋 PANDUAN PENGISIAN</strong>
+    • Field bertanda <strong style="color:#C1121F;">*</strong> wajib diisi.<br>
+    • <strong>Angka:</strong> Tulis angka saja, tanpa titik/koma/satuan.<br>
+    &nbsp;&nbsp;Contoh: tulis <strong>280</strong> bukan <em>280 Kg</em> atau <em>280,0</em><br>
+    • <strong>Tanggal:</strong> Format DD/MM/YYYY. Contoh: <strong>30/06/2026</strong><br>
+    • Sisa Hari dan Status dihitung <strong>otomatis</strong>.<br>
+    • Klik <strong>+ Tambah TK</strong> untuk TK berikutnya.<br>
+    • Klik <strong>+ Tambah Logbase</strong> jika satuan dilayani lebih dari 1 Logbase.<br>
+    • Setelah selesai → klik <strong>Buat Laporan</strong> → Copy → Kirim ke Admin via WA.
+  </div>
+
+  <!-- IDENTITAS -->
+  <div class="card">
+    <div class="card-title">📄 Identitas Laporan</div>
+
+    <div class="form-group">
+      <label>Tanggal Laporan <span class="wajib">*</span></label>
+      <input type="text" id="tgl" placeholder="24/06/2026" maxlength="10" inputmode="numeric">
+      <div class="hint">Format: DD/MM/YYYY</div>
+    </div>
+
+    <div class="form-group">
+      <label>Waktu Submit <span class="satuan">(otomatis)</span></label>
+      <input type="text" id="waktu-submit" class="auto" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>Satuan <span class="wajib">*</span></label>
+      <input type="text" id="satuan" placeholder="Contoh: YONIF 744/SYB" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+    </div>
+
+    <div class="form-group">
+      <label>Nama Kallan <span class="wajib">*</span></label>
+      <input type="text" id="kallan" placeholder="Contoh: KAPTEN INF ALGA" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+    </div>
+
+    <div class="form-group">
+      <label>No HP Kallan <span class="wajib">*</span></label>
+      <input type="tel" id="hp" placeholder="081260160041" maxlength="15" inputmode="tel">
+      <div class="hint">Tulis angka saja. Contoh: 081260160041</div>
+    </div>
+  </div>
+
+  <!-- LOGBASE CONTAINER -->
+  <div id="logbase-container"></div>
+
+  <!-- TOMBOL TAMBAH LOGBASE -->
+  <button type="button" class="btn-tambah biru" id="btn-tambah-logbase">
+    ＋ Tambah Logbase
+  </button>
+  <div class="hint" style="margin-top:6px;margin-bottom:16px;">
+    Klik jika satuan Anda dilayani lebih dari 1 Logbase
+  </div>
+
+  <!-- PESAN VALIDASI -->
+  <div class="pesan" id="pesan"></div>
+
+  <!-- TOMBOL UTAMA -->
+  <div class="btn-row">
+    <button type="button" class="btn btn-hijau" id="btn-buat">✅ Buat Laporan</button>
+    <button type="button" class="btn btn-abu" id="btn-reset">🔄 Reset</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-box" id="output-box">
+    <h3>📋 Teks Laporan — Copy &amp; Kirim via WA</h3>
+    <div class="output-text" id="output-text"></div>
+    <div class="output-btn-row">
+      <button type="button" class="btn-copy" id="btn-copy">📋 Copy Teks</button>
+      <button type="button" class="btn-copy" onclick="window.print()" style="background:#B7D9C4;color:#1A4731;">🖨 Cetak</button>
+    </div>
+    <div class="output-hint">
+      Langkah: Copy teks di atas → Buka WhatsApp → Paste ke chat Admin Dorlog → Kirim
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ============================================================
+// DATA MASTER
+// ============================================================
+var LOGBASE_LIST = [
+  "TIMIKA","SENTANI","SINAK","SUGAPA","BEOGA",
+  "KENYAM","ILAGA","WAMENA","ENAROTALI","OKSIBIL",
+  "SENGGI","TANAH MERAH"
+];
+
+var TIPE_TK_LIST = [
+  "TK DARAT","TK UDARA","POS UDARA","POS DARAT","LOGBASE","DEPO"
+];
+
+var SORTIE_LIST = ["TIDAK","YA","DARURAT - Segera!"];
+
+var logbaseCount = 0;
+var tkCounters   = {};
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  updateWaktu();
+  setInterval(updateWaktu, 1000);
+
+  // Set tanggal hari ini
+  var now = new Date();
+  var d = pad(now.getDate()) + '/' + pad(now.getMonth()+1) + '/' + now.getFullYear();
+  document.getElementById('tgl').value = d;
+
+  // Format tanggal saat ketik
+  document.getElementById('tgl').addEventListener('input', function() {
+    formatTglInput(this);
+  });
+
+  // Tombol tambah logbase
+  document.getElementById('btn-tambah-logbase').addEventListener('click', function() {
+    tambahLogbase();
+  });
+
+  // Tombol buat laporan
+  document.getElementById('btn-buat').addEventListener('click', function() {
+    buatLaporan();
+  });
+
+  // Tombol reset
+  document.getElementById('btn-reset').addEventListener('click', function() {
+    resetForm();
+  });
+
+  // Tombol copy
+  document.getElementById('btn-copy').addEventListener('click', function() {
+    copyTeks();
+  });
+
+  // Uppercase otomatis
+  document.getElementById('satuan').addEventListener('blur', function() {
+    this.value = this.value.toUpperCase();
+  });
+  document.getElementById('kallan').addEventListener('blur', function() {
+    this.value = this.value.toUpperCase();
+  });
+  document.getElementById('hp').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  // Tambah logbase pertama
+  tambahLogbase();
+});
+
+// ============================================================
+// JAM REAL-TIME
+// ============================================================
+function updateWaktu() {
+  var now   = new Date();
+  var jam   = pad(now.getHours());
+  var mnt   = pad(now.getMinutes());
+  var dtk   = pad(now.getSeconds());
+  var tgl   = pad(now.getDate()) + '/' + pad(now.getMonth()+1) + '/' + now.getFullYear();
+  var badge = document.getElementById('deadline-badge');
+
+  document.getElementById('jam-display').textContent    = tgl + ' ' + jam + ':' + mnt;
+  document.getElementById('waktu-submit').value         = tgl + ' ' + jam + ':' + mnt + ':' + dtk;
+
+  if (now.getHours() >= 18) {
+    badge.textContent = '⚠️ MELEWATI DEADLINE 18.00!';
+    badge.className   = 'deadline-badge lewat';
+  } else {
+    badge.textContent = '⏰ Deadline: 18.00 WIB';
+    badge.className   = 'deadline-badge';
+  }
+}
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+// ============================================================
+// FORMAT TANGGAL SAAT KETIK
+// ============================================================
+function formatTglInput(el) {
+  var v = el.value.replace(/[^0-9]/g, '');
+  if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+  if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5);
+  if (v.length > 10) v = v.slice(0,10);
+  el.value = v;
+}
+
+// ============================================================
+// LOGBASE
+// ============================================================
+function tambahLogbase() {
+  logbaseCount++;
+  var lb = logbaseCount;
+  tkCounters[lb] = 0;
+
+  var container = document.getElementById('logbase-container');
+  var div = document.createElement('div');
+  div.className = 'logbase-block';
+  div.id = 'logbase-' + lb;
+
+  var hapusBtn = lb > 1
+    ? '<button type="button" class="btn-merah-outline" data-hapus-lb="' + lb + '">✕ Hapus</button>'
+    : '';
+
+  div.innerHTML =
+    '<div class="logbase-header">' +
+      '<div class="logbase-label" id="lb-label-' + lb + '">📦 Logbase ' + lb + '</div>' +
+      hapusBtn +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label>Nama Logbase <span class="wajib">*</span></label>' +
+      '<div class="select-wrap">' +
+        '<select id="lb-nama-' + lb + '" data-lb="' + lb + '">' +
+          '<option value="">— Pilih Logbase —</option>' +
+          LOGBASE_LIST.map(function(l) { return '<option value="' + l + '">' + l + '</option>'; }).join('') +
+        '</select>' +
+      '</div>' +
+    '</div>' +
+    '<div id="tk-container-' + lb + '"></div>' +
+    '<button type="button" class="btn-tambah" data-tambah-tk="' + lb + '">＋ Tambah TK</button>';
+
+  container.appendChild(div);
+
+  // Event listener select logbase
+  document.getElementById('lb-nama-' + lb).addEventListener('change', function() {
+    var nama = this.value;
+    var label = document.getElementById('lb-label-' + lb);
+    label.textContent = '📦 Logbase ' + lb + (nama ? ': ' + nama : '');
+  });
+
+  // Event listener hapus logbase
+  if (lb > 1) {
+    div.querySelector('[data-hapus-lb]').addEventListener('click', function() {
+      hapusLogbase(lb);
+    });
+  }
+
+  // Event listener tambah TK
+  div.querySelector('[data-tambah-tk]').addEventListener('click', function() {
+    tambahTK(lb);
+  });
+
+  // Tambah TK pertama otomatis
+  tambahTK(lb);
+}
+
+function hapusLogbase(lb) {
+  if (logbaseCount <= 1) { alert('Minimal harus ada 1 Logbase.'); return; }
+  if (confirm('Hapus Logbase ' + lb + ' beserta semua TK di dalamnya?')) {
+    var el = document.getElementById('logbase-' + lb);
+    if (el) el.parentNode.removeChild(el);
+  }
+}
+
+// ============================================================
+// TK
+// ============================================================
+function tambahTK(lb) {
+  tkCounters[lb]++;
+  var tk = tkCounters[lb];
+  var id = lb + '_' + tk;
+
+  // Hitung nomor global
+  var global = 0;
+  for (var i = 1; i <= lb; i++) {
+    if (i < lb) global += (tkCounters[i] || 0);
+    else global += tk;
+  }
+
+  var container = document.getElementById('tk-container-' + lb);
+  var div = document.createElement('div');
+  div.className = 'tk-block';
+  div.id = 'tk-' + id;
+
+  var hapusBtn = tk > 1
+    ? '<button type="button" class="btn-merah-outline" data-hapus-tk="' + id + '">✕</button>'
+    : '';
+
+  div.innerHTML =
+    '<div class="tk-header">' +
+      '<div class="tk-label" id="tk-label-' + id + '">🏕 TK ke-' + global + ' (No.' + tk + ')</div>' +
+      hapusBtn +
+    '</div>' +
+
+    // Nama TK
+    '<div class="form-group">' +
+      '<label>Nama TK <span class="wajib">*</span></label>' +
+      '<input type="text" id="tk-nama-' + id + '" placeholder="Contoh: Mamba (Kotis)" autocomplete="off" autocorrect="off" spellcheck="false">' +
+      '<div class="hint">Tulis nama TK sesuai daftar resmi.</div>' +
+    '</div>' +
+
+    // Personel & Stok
+    '<div class="form-group">' +
+      '<label>Jumlah Personel <span class="wajib">*</span> <span class="satuan">(orang)</span></label>' +
+      '<input type="number" id="tk-pers-' + id + '" min="0" placeholder="78" inputmode="numeric">' +
+      '<div class="hint">Isi angka saja. Satuan: orang.</div>' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>Stok Logistik <span class="wajib">*</span> <span class="satuan">(Kg)</span></label>' +
+      '<input type="number" id="tk-stok-' + id + '" min="0" placeholder="280" inputmode="numeric">' +
+      '<div class="hint">Isi angka saja. Satuan: Kilogram.</div>' +
+    '</div>' +
+
+    // Tahan s/d tanggal
+    '<div class="form-group">' +
+      '<label>Tahan Sampai Tanggal <span class="wajib">*</span></label>' +
+      '<input type="text" id="tk-tahan-' + id + '" placeholder="30/06/2026" maxlength="10" inputmode="numeric">' +
+      '<div class="hint">Format: DD/MM/YYYY. Estimasi logistik habis pada tanggal ini.</div>' +
+    '</div>' +
+
+    // Sisa Hari (auto)
+    '<div class="form-group">' +
+      '<label>Sisa Hari <span class="satuan">(otomatis)</span></label>' +
+      '<input type="text" id="tk-sisa-' + id + '" class="auto" readonly value="—">' +
+    '</div>' +
+
+    // Status (auto)
+    '<div class="form-group">' +
+      '<label>Status Ketahanan <span class="satuan">(otomatis)</span></label>' +
+      '<div class="status-wrap">' +
+        '<span class="status-badge s-default" id="tk-status-display-' + id + '">—</span>' +
+      '</div>' +
+      '<input type="hidden" id="tk-status-' + id + '" value="">' +
+    '</div>' +
+
+    // Tipe TK
+    '<div class="form-group">' +
+      '<label>Tipe TK <span class="wajib">*</span></label>' +
+      '<div class="select-wrap">' +
+        '<select id="tk-tipe-' + id + '">' +
+          '<option value="">— Pilih —</option>' +
+          TIPE_TK_LIST.map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join('') +
+        '</select>' +
+      '</div>' +
+    '</div>' +
+
+    // Butuh sortie
+    '<div class="form-group">' +
+      '<label>Butuh Sortie Logistik?</label>' +
+      '<div class="select-wrap">' +
+        '<select id="tk-sortie-' + id + '" data-id="' + id + '">' +
+          SORTIE_LIST.map(function(s) { return '<option value="' + s + '">' + s + '</option>'; }).join('') +
+        '</select>' +
+      '</div>' +
+    '</div>' +
+
+    // Estimasi kebutuhan (muncul jika butuh sortie)
+    '<div class="form-group" id="tk-est-row-' + id + '" style="display:none;">' +
+      '<label>Estimasi Kebutuhan <span class="wajib">*</span> <span class="satuan">(Kg)</span></label>' +
+      '<input type="number" id="tk-est-' + id + '" min="0" placeholder="Contoh: 300" inputmode="numeric">' +
+      '<div class="hint">Estimasi logistik yang perlu dikirim. Satuan: Kg.</div>' +
+    '</div>' +
+
+    // Catatan
+    '<div class="form-group">' +
+      '<label>Catatan Situasi</label>' +
+      '<textarea id="tk-catatan-' + id + '" placeholder="Isi jika ada situasi khusus atau kendala. Kosongkan jika tidak ada." maxlength="500"></textarea>' +
+      '<div class="hint">Maks 500 karakter. Opsional.</div>' +
+    '</div>';
+
+  container.appendChild(div);
+
+  // Event: hapus TK
+  if (tk > 1) {
+    div.querySelector('[data-hapus-tk]').addEventListener('click', function() {
+      hapusTK(id);
+    });
+  }
+
+  // Event: format tanggal tahan
+  document.getElementById('tk-tahan-' + id).addEventListener('input', function() {
+    formatTglInput(this);
+    hitungSisaHari(id);
+  });
+
+  // Event: hitung sisa hari saat stok berubah
+  document.getElementById('tk-stok-' + id).addEventListener('input', function() {
+    hitungSisaHari(id);
+  });
+
+  // Event: butuh sortie
+  document.getElementById('tk-sortie-' + id).addEventListener('change', function() {
+    cekSortie(id, this.value);
+  });
+}
+
+function hapusTK(id) {
+  if (confirm('Hapus data TK ini?')) {
+    var el = document.getElementById('tk-' + id);
+    if (el) el.parentNode.removeChild(el);
+  }
+}
+
+function cekSortie(id, val) {
+  var row = document.getElementById('tk-est-row-' + id);
+  if (!row) return;
+  row.style.display = (val === 'YA' || val.indexOf('DARURAT') === 0) ? 'block' : 'none';
+}
+
+// ============================================================
+// HITUNG SISA HARI & STATUS
+// ============================================================
+function hitungSisaHari(id) {
+  var tahanEl = document.getElementById('tk-tahan-' + id);
+  var tglEl   = document.getElementById('tgl');
+  var sisaEl  = document.getElementById('tk-sisa-' + id);
+  var dispEl  = document.getElementById('tk-status-display-' + id);
+  var hidEl   = document.getElementById('tk-status-' + id);
+  var tkEl    = document.getElementById('tk-' + id);
+
+  if (!tahanEl || !tglEl || !sisaEl) return;
+
+  var tahanStr = tahanEl.value;
+  var tglStr   = tglEl.value;
+
+  if (!tahanStr || tahanStr.length < 10 || !tglStr || tglStr.length < 10) {
+    sisaEl.value = '—';
+    if (dispEl) dispEl.innerHTML = '<span class="status-badge s-default">—</span>';
+    if (hidEl)  hidEl.value = '';
+    return;
+  }
+
+  var tahan = parseTgl(tahanStr);
+  var base  = parseTgl(tglStr);
+
+  if (!tahan || !base) {
+    sisaEl.value = '—';
+    return;
+  }
+
+  var diff = Math.round((tahan.getTime() - base.getTime()) / (1000*60*60*24));
+  sisaEl.value = diff;
+
+  var status, cls;
+  if      (diff > 3)  { status = 'AMAN';    cls = 'AMAN'; }
+  else if (diff >= 0) { status = 'WASPADA'; cls = 'WASPADA'; }
+  else if (diff >= -3){ status = 'MINUS';   cls = 'MINUS'; }
+  else                { status = 'KRITIS';  cls = 'KRITIS'; }
+
+  if (dispEl) dispEl.innerHTML = '<span class="status-badge s-' + cls + '">' + status + '</span>';
+  if (hidEl)  hidEl.value = status;
+
+  // Warna border TK
+  if (tkEl) {
+    tkEl.className = 'tk-block' + (cls === 'KRITIS' ? ' kritis' : cls === 'MINUS' ? ' minus' : '');
+  }
+
+  // Auto-set DARURAT jika KRITIS
+  var sortieEl = document.getElementById('tk-sortie-' + id);
+  if (cls === 'KRITIS' && sortieEl && sortieEl.value === 'TIDAK') {
+    sortieEl.value = 'DARURAT - Segera!';
+    cekSortie(id, sortieEl.value);
+  }
+}
+
+function parseTgl(s) {
+  var p = s.split('/');
+  if (p.length !== 3) return null;
+  var d = new Date(parseInt(p[2]), parseInt(p[1])-1, parseInt(p[0]));
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// ============================================================
+// BUAT LAPORAN
+// ============================================================
+function buatLaporan() {
+  var pesanEl = document.getElementById('pesan');
+  pesanEl.style.display = 'none';
+
+  var errors = [];
+
+  // Validasi header
+  var tgl    = document.getElementById('tgl').value.trim();
+  var satuan = document.getElementById('satuan').value.trim();
+  var kallan = document.getElementById('kallan').value.trim();
+  var hp     = document.getElementById('hp').value.trim();
+  var waktu  = document.getElementById('waktu-submit').value;
+
+  if (!tgl || tgl.length < 10) errors.push('Tanggal Laporan belum diisi atau format salah (DD/MM/YYYY)');
+  if (!satuan)                  errors.push('Nama Satuan belum diisi');
+  if (!kallan)                  errors.push('Nama Kallan belum diisi');
+  if (!hp || hp.length < 9)     errors.push('No HP Kallan belum diisi atau tidak valid');
+
+  // Validasi logbase
+  var lbBlocks = document.querySelectorAll('.logbase-block');
+  if (lbBlocks.length === 0) errors.push('Minimal harus ada 1 Logbase');
+
+  var tkGlobal = 0;
+  var outputLines = [];
+
+  outputLines.push('=== LAPORAN HANLOG DORLOG ===');
+  outputLines.push('TGL: ' + tgl);
+  outputLines.push('SATUAN: ' + satuan.toUpperCase());
+  outputLines.push('KALLAN: ' + kallan.toUpperCase());
+  outputLines.push('HP: ' + hp);
+  outputLines.push('WAKTU: ' + waktu);
+
+  for (var li = 0; li < lbBlocks.length; li++) {
+    var lbEl = lbBlocks[li];
+    var lbId = lbEl.id.replace('logbase-', '');
+    var lbNama = document.getElementById('lb-nama-' + lbId);
+    var lbNamaVal = lbNama ? lbNama.value : '';
+
+    if (!lbNamaVal) {
+      errors.push('Logbase ' + (li+1) + ': Nama Logbase belum dipilih');
+    }
+
+    outputLines.push('');
+    outputLines.push('--- LOGBASE: ' + (lbNamaVal || '?') + ' ---');
+
+    var tkBlocks = lbEl.querySelectorAll('.tk-block');
+    if (tkBlocks.length === 0) {
+      errors.push('Logbase ' + (li+1) + ': Minimal harus ada 1 TK');
+    }
+
+    for (var ti = 0; ti < tkBlocks.length; ti++) {
+      var tkEl = tkBlocks[ti];
+      var rawId = tkEl.id.replace('tk-', '');
+      tkGlobal++;
+
+      var nama   = valOf('tk-nama-' + rawId);
+      var pers   = valOf('tk-pers-' + rawId);
+      var stok   = valOf('tk-stok-' + rawId);
+      var tahan  = valOf('tk-tahan-' + rawId);
+      var sisa   = valOf('tk-sisa-' + rawId);
+      var status = valOf('tk-status-' + rawId);
+      var tipe   = valOf('tk-tipe-' + rawId);
+      var sortie = valOf('tk-sortie-' + rawId);
+      var est    = valOf('tk-est-' + rawId);
+      var cat    = valOf('tk-catatan-' + rawId);
+
+      if (!nama)              errors.push('Logbase ' + (li+1) + ' TK ' + (ti+1) + ': Nama TK belum diisi');
+      if (pers === '')        errors.push('Logbase ' + (li+1) + ' TK ' + (ti+1) + ': Jumlah Personel belum diisi');
+      if (stok === '')        errors.push('Logbase ' + (li+1) + ' TK ' + (ti+1) + ': Stok Logistik belum diisi');
+      if (!tahan || tahan.length < 10) errors.push('Logbase ' + (li+1) + ' TK ' + (ti+1) + ': Tanggal Tahan belum diisi');
+      if (!tipe)              errors.push('Logbase ' + (li+1) + ' TK ' + (ti+1) + ': Tipe TK belum dipilih');
+
+      var noStr = 'TK_' + pad3(tkGlobal);
+      outputLines.push(noStr + ':');
+      outputLines.push('  NAMA_TK: ' + (nama || '-'));
+      outputLines.push('  JML_PERS: ' + (pers || '0'));
+      outputLines.push('  STOK_KG: ' + (stok || '0'));
+      outputLines.push('  TAHAN_TGL: ' + (tahan || '-'));
+      outputLines.push('  SISA_HARI: ' + (sisa || '-'));
+      outputLines.push('  STATUS: ' + (status || '-'));
+      outputLines.push('  TIPE_TK: ' + (tipe || '-'));
+      outputLines.push('  BUTUH_SORTIE: ' + (sortie || 'TIDAK'));
+      if (sortie && sortie !== 'TIDAK') {
+        outputLines.push('  EST_KEBUTUHAN_KG: ' + (est || '-'));
+      }
+      outputLines.push('  CATATAN: ' + (cat || '-'));
+    }
+  }
+
+  outputLines.push('');
+  outputLines.push('=== END HANLOG ===');
+
+  // Tampilkan error jika ada
+  if (errors.length > 0) {
+    pesanEl.className = 'pesan error';
+    pesanEl.style.display = 'block';
+    pesanEl.innerHTML = '<strong>⚠ Harap lengkapi data berikut:</strong><br>' +
+      errors.map(function(e) { return '• ' + e; }).join('<br>');
+    pesanEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Tampilkan output
+  var outputStr = outputLines.join('\n');
+  document.getElementById('output-text').textContent = outputStr;
+  document.getElementById('output-box').style.display = 'block';
+
+  pesanEl.className = 'pesan ok';
+  pesanEl.style.display = 'block';
+  pesanEl.innerHTML = '✅ Laporan berhasil dibuat! ' + tkGlobal + ' TK dari ' + lbBlocks.length + ' Logbase. Scroll ke bawah untuk copy teks.';
+  document.getElementById('output-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function valOf(id) {
+  var el = document.getElementById(id);
+  if (!el) return '';
+  return (el.value || '').trim();
+}
+
+function pad3(n) {
+  return n < 10 ? '00' + n : n < 100 ? '0' + n : '' + n;
+}
+
+// ============================================================
+// COPY TEKS — Safari-compatible
+// ============================================================
+function copyTeks() {
+  var teks = document.getElementById('output-text').textContent;
+
+  // Method 1: Clipboard API (modern)
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(teks).then(function() {
+      alert('✅ Teks berhasil di-copy!\nBuka WhatsApp → Paste → Kirim ke Admin Dorlog.');
+    }).catch(function() {
+      fallbackCopy(teks);
+    });
+  } else {
+    fallbackCopy(teks);
+  }
+}
+
+function fallbackCopy(teks) {
+  // Method 2: execCommand (Safari fallback)
+  var el = document.createElement('textarea');
+  el.value = teks;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  el.style.top = '0';
+  document.body.appendChild(el);
+
+  // iOS Safari fix
+  var range = document.createRange();
+  range.selectNodeContents(el);
+  var sel = window.getSelection();
+  if (sel) {
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  el.setSelectionRange(0, 99999);
+
+  try {
+    document.execCommand('copy');
+    alert('✅ Teks berhasil di-copy!\nBuka WhatsApp → Paste → Kirim ke Admin Dorlog.');
+  } catch(e) {
+    alert('Tekan & tahan teks laporan di atas, lalu pilih "Salin Semua" untuk menyalin secara manual.');
+  }
+  document.body.removeChild(el);
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function resetForm() {
+  if (confirm('Reset semua isian? Data yang sudah diisi akan hilang.')) {
+    document.getElementById('satuan').value = '';
+    document.getElementById('kallan').value = '';
+    document.getElementById('hp').value = '';
+    document.getElementById('pesan').style.display = 'none';
+    document.getElementById('output-box').style.display = 'none';
+    document.getElementById('logbase-container').innerHTML = '';
+    logbaseCount = 0;
+    tkCounters = {};
+    tambahLogbase();
+  }
+}
+</script>
+</body>
+</html>
