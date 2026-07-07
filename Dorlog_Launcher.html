@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Dorlog — Satgas Banmin 2026/2027</title>
+<style>
+/* ════════════════════════════════════════════════
+   DORLOG LAUNCHER — Global Variables & Reset
+   ════════════════════════════════════════════════ */
+:root {
+  --navy:        #0d1b2a;
+  --navy-mid:    #1b2d42;
+  --navy-light:  #253d57;
+  --gold:        #c8a44a;
+  --gold-light:  #e0bc72;
+  --green:       #2e7d52;
+  --green-dark:  #0d2a1b;
+  --green-mid:   #1b4232;
+  --green-light: #3da068;
+  --green-accent:#7ecf9f;
+  --orange:      #c85a1a;
+  --orange-mid:  #3d1d0d;
+  --orange-light:#f0a060;
+  --red:         #c0392b;
+  --blue:        #1a6fa8;
+  --amber:       #d4a017;
+  --bg:          #f0f2f5;
+  --card:        #ffffff;
+  --text:        #1a1a2e;
+  --text-muted:  #5a6a7a;
+  --border:      #d0d8e4;
+  --input-bg:    #f8fafc;
+  --yellow-input:#fffbea;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  padding-bottom: 40px;
+}
+
+/* ── SHARED HEADER ───────────────────────────────────────── */
+.dorlog-header {
+  color: white;
+  padding: 16px 20px 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.dorlog-header .badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.dorlog-header h1 { font-size: 18px; font-weight: 700; }
+.dorlog-header .sub { font-size: 11px; opacity: 0.7; margin-top: 3px; }
+.header-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: white; border-radius: 6px; padding: 5px 10px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  margin-bottom: 8px; -webkit-appearance: none;
+}
+.header-back:active { background: rgba(255,255,255,0.25); }
+
+/* ── LAUNCHER PAGE ───────────────────────────────────────── */
+#page-launcher { display: block; }
+#page-launcher .dorlog-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+}
+#page-launcher .dorlog-header .badge { color: var(--gold); }
+
+.launcher-body {
+  max-width: 500px; margin: 0 auto; padding: 20px 16px;
+}
+.launcher-title {
+  text-align: center; margin-bottom: 28px;
+}
+.launcher-title .system-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;
+}
+.launcher-title h2 {
+  font-size: 20px; font-weight: 800; color: var(--navy); line-height: 1.3;
+}
+.launcher-title .subtitle {
+  font-size: 12px; color: var(--text-muted); margin-top: 4px;
+}
+
+.form-card {
+  background: var(--card);
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: stretch;
+}
+.form-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.form-card-accent {
+  width: 6px; flex-shrink: 0;
+}
+.form-card-body {
+  padding: 16px 14px; flex: 1;
+  display: flex; align-items: center; gap: 14px;
+}
+.form-card-icon {
+  font-size: 28px; line-height: 1; flex-shrink: 0;
+}
+.form-card-text { flex: 1; }
+.form-card-text .form-num {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.form-card-text h3 { font-size: 16px; font-weight: 700; }
+.form-card-text p  { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+.form-card-arrow {
+  font-size: 18px; color: #ccc; flex-shrink: 0; padding-right: 4px;
+}
+
+.form-card.sortie .form-card-accent { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%); }
+.form-card.sortie .form-card-text .form-num { color: var(--navy); }
+.form-card.bbm    .form-card-accent { background: linear-gradient(180deg, var(--green-dark) 0%, var(--green-mid) 100%); }
+.form-card.bbm    .form-card-text .form-num { color: var(--green-dark); }
+.form-card.hanlog .form-card-accent { background: linear-gradient(180deg, var(--orange-mid) 0%, var(--orange) 100%); }
+.form-card.hanlog .form-card-text .form-num { color: var(--orange); }
+
+.launcher-info {
+  background: #fff8e8;
+  border: 1.5px solid #f0d080;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: #7d5a00;
+  line-height: 1.6;
+  margin-top: 4px;
+}
+.launcher-info strong { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.5px; }
+
+/* ── FORM PAGES (hidden by default) ─────────────────────── */
+#page-sortie, #page-bbm, #page-hanlog { display: none; }
+
+/* ════════════════════════════════════════════════
+   SHARED FORM STYLES (untuk semua 3 form)
+   ════════════════════════════════════════════════ */
+.container { max-width: 680px; margin: 0 auto; padding: 16px 14px; }
+.section-card {
+  background: var(--card); border-radius: 12px;
+  border: 1px solid var(--border); margin-bottom: 14px;
+  overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.section-body { padding: 14px; }
+.field-group { margin-bottom: 12px; }
+.field-group:last-child { margin-bottom: 0; }
+label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 5px;
+}
+.req { color: var(--red); }
+.auto-tag {
+  font-size: 9px; background: #e8f4fd; color: var(--blue);
+  border: 1px solid #b3d9f7; border-radius: 4px; padding: 1px 5px;
+  font-weight: 700; letter-spacing: 0.5px; vertical-align: middle; margin-left: 4px;
+}
+input[type="text"], input[type="number"], input[type="date"],
+input[type="tel"], select, textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 16px; background: var(--input-bg); color: var(--text);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color 0.15s; font-family: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--green); background: #fff;
+}
+.yellow-input { background: var(--yellow-input); }
+.auto-field { background: #edf2f7; color: var(--text-muted); font-size: 14px; }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+select { cursor: pointer; }
+.hidden { display: none !important; }
+.hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+.opt-tag {
+  font-size: 9px; background: #e8f4fd; color: var(--blue);
+  border: 1px solid #b3d9f7; border-radius: 4px; padding: 1px 5px; font-weight: 700;
+}
+
+/* Output area */
+#s-output-area, #b-output-area, #h-output-area { display: none; margin-top: 4px; }
+.output-text-field {
+  width: 100%; height: 300px; font-family: 'Courier New', monospace;
+  font-size: 12px; padding: 12px; border: 1.5px solid var(--border);
+  border-radius: 8px; background: #f8f9fa; resize: vertical; margin-bottom: 8px;
+}
+.btn-copy {
+  width: 100%; padding: 12px; background: var(--green); color: white;
+  border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+  cursor: pointer; -webkit-appearance: none; margin-bottom: 6px;
+}
+.btn-copy:active { opacity: 0.85; }
+.copy-feedback { text-align: center; font-size: 13px; color: var(--green); min-height: 20px; font-weight: 600; }
+.btn-koma {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; background: #e8eef4; color: var(--navy);
+  font-size: 18px; font-weight: 700; cursor: pointer;
+  -webkit-appearance: none; flex-shrink: 0; line-height: 1;
+  height: 44px; display: flex; align-items: center; justify-content: center;
+}
+.btn-koma:active { background: var(--navy); color: white; }
+.btn-reset-form {
+  width: 100%; padding: 10px; background: transparent;
+  border: 1.5px solid #ccc; border-radius: 8px;
+  color: var(--text-muted); font-size: 13px; cursor: pointer;
+  margin-top: 8px; -webkit-appearance: none;
+}
+
+/* ════════════════════════════════
+   FORM SORTIE — specific styles
+   ════════════════════════════════ */
+#page-sortie .dorlog-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+}
+#page-sortie .dorlog-header .badge { color: var(--gold); }
+.s-section-header {
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--gold-light); font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; padding: 8px 14px;
+  display: flex; align-items: center; gap: 7px;
+}
+.s-section-header .dot { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+.sortie-block {
+  background: var(--card); border-radius: 12px; border: 1.5px solid var(--border);
+  margin-bottom: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.sortie-block-header {
+  background: linear-gradient(90deg, #162035 0%, #1e2d4a 100%);
+  color: #a0b8d8; font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; padding: 9px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sortie-block-header .num {
+  background: var(--gold); color: var(--navy);
+  border-radius: 50%; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.sortie-block-body { padding: 14px; }
+.btn-rm-sortie {
+  background: rgba(192,57,43,0.12); border: 1px solid rgba(192,57,43,0.3);
+  color: #e07060; border-radius: 5px; padding: 3px 8px;
+  font-size: 11px; cursor: pointer; -webkit-appearance: none;
+}
+.refuel-block {
+  background: #f0f7ff; border: 1.5px solid #c0d8f0;
+  border-radius: 8px; padding: 10px 12px; margin-top: 8px;
+}
+.btn-add-sortie {
+  width: 100%; padding: 12px; border: 2px dashed #90a8c0;
+  border-radius: 10px; background: transparent; color: var(--navy-light);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  margin-bottom: 14px; -webkit-appearance: none;
+}
+.btn-add-sortie:active { background: #e8eef4; }
+.btn-generate-sortie {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: var(--gold-light); border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.5px; -webkit-appearance: none; margin-bottom: 12px;
+}
+.btn-generate-sortie:active { opacity: 0.85; }
+.auto-display {
+  background: #edf2f7; border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 10px 12px;
+  font-size: 14px; color: var(--text-muted); font-weight: 600;
+}
+.ac-wrap { position: relative; }
+.ac-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 300;
+  background: #fff; border: 1.5px solid var(--green);
+  border-radius: 0 0 8px 8px; max-height: 180px; overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.ac-list div {
+  padding: 10px 12px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #eee;
+}
+.ac-list div:last-child { border-bottom: none; }
+.ac-list div:active, .ac-list div:hover { background: #e8f5ee; }
+.cond-hidden { display: none; }
+
+/* ════════════════════════════════
+   FORM BBM — specific styles
+   ════════════════════════════════ */
+#page-bbm .dorlog-header {
+  background: linear-gradient(135deg, #0d2a1b 0%, #1b4232 100%);
+}
+#page-bbm .dorlog-header .badge { color: var(--green-accent); }
+.b-section-header {
+  background: linear-gradient(90deg, #0d2a1b 0%, #1b4232 100%);
+  color: var(--green-accent); font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; padding: 8px 14px;
+  display: flex; align-items: center; gap: 7px;
+}
+.b-section-header .dot { width: 7px; height: 7px; background: var(--green-accent); border-radius: 50%; flex-shrink: 0; }
+.stok-display-box {
+  background: #e8f5ee; border: 1.5px solid #a8d5b8;
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 15px; font-weight: 700; color: #1a4d2e;
+  text-align: center; letter-spacing: 0.5px;
+}
+.stok-display-box.warn { background: #fff3cd; border-color: #f0c55a; color: #7d5a00; }
+.stok-display-box.danger { background: #fde8e8; border-color: #e08080; color: #8b0000; }
+.stok-display-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+.kirim-block {
+  background: #f0f7ff; border: 1.5px solid #c0d8f0;
+  border-radius: 8px; padding: 12px; margin-top: 10px;
+}
+.btn-add-kirim {
+  width: 100%; padding: 9px;
+  border: 1.5px dashed var(--green-accent); border-radius: 8px;
+  background: transparent; color: var(--green);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  margin-top: 8px; -webkit-appearance: none;
+}
+.btn-add-kirim:active { background: #e8f5ee; }
+.btn-rm-kirim {
+  padding: 8px 10px; border: 1.5px solid #e0c0c0;
+  border-radius: 8px; background: #fff0f0; color: var(--red);
+  font-size: 13px; cursor: pointer; -webkit-appearance: none;
+  margin-top: 6px; width: 100%;
+}
+.btn-generate-bbm {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #0d2a1b, #1b4232);
+  color: var(--green-accent); border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.5px; -webkit-appearance: none; margin-bottom: 12px;
+}
+.btn-generate-bbm:active { opacity: 0.85; }
+
+/* ════════════════════════════════
+   FORM HANLOG — specific styles
+   ════════════════════════════════ */
+#page-hanlog .dorlog-header {
+  background: linear-gradient(135deg, #2a1200 0%, #3d1d00 100%);
+}
+#page-hanlog .dorlog-header .badge { color: var(--orange-light); }
+.h-section-header {
+  background: linear-gradient(90deg, #2a1200 0%, #3d1d00 100%);
+  color: var(--orange-light); font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; padding: 8px 14px;
+  display: flex; align-items: center; gap: 7px;
+}
+.h-section-header .dot { width: 7px; height: 7px; background: var(--orange-light); border-radius: 50%; flex-shrink: 0; }
+.tk-block {
+  background: var(--card); border-radius: 12px; border: 1.5px solid var(--border);
+  margin-bottom: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+.tk-block-header {
+  background: linear-gradient(90deg, #2a1200 0%, #3d1d00 100%);
+  color: #f0a060; font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; padding: 9px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.tk-block-header .num {
+  background: var(--orange-light); color: #2a1200;
+  border-radius: 50%; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+}
+.tk-block-body { padding: 14px; }
+.btn-rm-tk {
+  background: rgba(192,57,43,0.12); border: 1px solid rgba(192,57,43,0.3);
+  color: #e07060; border-radius: 5px; padding: 3px 8px;
+  font-size: 11px; cursor: pointer; -webkit-appearance: none;
+}
+.status-auto {
+  border-radius: 6px; padding: 8px 12px; font-weight: 700;
+  font-size: 14px; text-align: center;
+}
+.s-aman    { background: #d4edda; color: #155724; }
+.s-waspada { background: #fff3cd; color: #856404; }
+.s-minus   { background: #ffe5cc; color: #8b3300; }
+.s-kritis  { background: #f8d7da; color: #721c24; }
+.s-kosong  { background: #edf2f7; color: var(--text-muted); }
+.btn-add-tk {
+  width: 100%; padding: 12px; border: 2px dashed #c0906a;
+  border-radius: 10px; background: transparent; color: #7d3a10;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  margin-bottom: 14px; -webkit-appearance: none;
+}
+.btn-add-tk:active { background: #fff0e8; }
+.btn-generate-hanlog {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #2a1200, #3d1d00);
+  color: var(--orange-light); border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  letter-spacing: 0.5px; -webkit-appearance: none; margin-bottom: 12px;
+}
+.btn-generate-hanlog:active { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: LAUNCHER MENU
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-launcher">
+  <header class="dorlog-header">
+    <div class="badge">🛡 Dorlog — Satgas Banmin 2026/2027</div>
+    <h1>Sistem Pelaporan Dorlog</h1>
+    <div class="sub">Pilih form yang akan diisi — Batas lapor: 18.00 WIB</div>
+  </header>
+  <div class="launcher-body">
+    <div class="launcher-title">
+      <div class="system-label">Data Operasional Penerbangan &amp; Logistik</div>
+      <h2>Pilih Form Laporan</h2>
+      <div class="subtitle">Papua — Mei 2026 s/d Februari 2027</div>
+    </div>
+
+    <div class="form-card sortie" onclick="showPage('sortie')">
+      <div class="form-card-accent"></div>
+      <div class="form-card-body">
+        <div class="form-card-icon">✈️</div>
+        <div class="form-card-text">
+          <div class="form-num">Form 1 — Sortie</div>
+          <h3>Laporan Penerbangan</h3>
+          <p>Input data sortie harian, muatan, BBM, jam terbang, dan mission status</p>
+        </div>
+        <div class="form-card-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="form-card bbm" onclick="showPage('bbm')">
+      <div class="form-card-accent"></div>
+      <div class="form-card-body">
+        <div class="form-card-icon">⛽</div>
+        <div class="form-card-text">
+          <div class="form-num">Form 2 — BBM Avtur</div>
+          <h3>Stok Avtur Harian</h3>
+          <p>Pencatatan stok Depo &amp; Logbase, penerimaan, pemakaian, dan pengiriman</p>
+        </div>
+        <div class="form-card-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="form-card hanlog" onclick="showPage('hanlog')">
+      <div class="form-card-accent"></div>
+      <div class="form-card-body">
+        <div class="form-card-icon">📦</div>
+        <div class="form-card-text">
+          <div class="form-num">Form 3 — HanLog</div>
+          <h3>Ketahanan Logistik</h3>
+          <p>Data stok logistik TK, sisa hari ketahanan, dan permintaan sortie</p>
+        </div>
+        <div class="form-card-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="launcher-info">
+      <strong>⚠ PETUNJUK PENGGUNAAN</strong>
+      Isi form → klik <b>Generate Laporan WA</b> → salin teks → kirim ke Admin via WhatsApp sebelum 18.00 WIB. Jangan kirim foto layar — kirim teks hasil generate.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: FORM SORTIE
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-sortie">
+  <header class="dorlog-header">
+    <button class="header-back" onclick="showPage('launcher')">‹ Menu</button>
+    <div class="badge">✈ Form 1 — Dorlog Satgas Banmin 2026/2027</div>
+    <h1>Laporan Penerbangan Sortie</h1>
+    <div class="sub">Batas lapor: 18.00 WIB — Data terenkripsi via WA</div>
+  </header>
+  <div class="container">
+    <!-- IDENTITAS -->
+    <div class="section-card">
+      <div class="s-section-header"><span class="dot"></span>IDENTITAS PELAPOR</div>
+      <div class="section-body">
+        <div class="row-2">
+          <div class="field-group">
+            <label>Tanggal Laporan <span class="req">*</span></label>
+            <input type="date" id="s-tgl-laporan" class="yellow-input">
+          </div>
+          <div class="field-group">
+            <label>Waktu Submit <span class="auto-tag">AUTO</span></label>
+            <input type="text" id="s-waktu-submit" class="auto-field" readonly>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Nama Depo / Logbase <span class="req">*</span></label>
+          <select id="s-nama-depo">
+            <option value="">— Pilih Depo/Logbase —</option>
+            <optgroup label="DEPO UTAMA"><option>TIMIKA</option><option>SENTANI</option></optgroup>
+            <optgroup label="LOGBASE (TIMIKA)">
+              <option>SINAK</option><option>KENYAM</option><option>ENAROTALI</option>
+              <option>SUGAPA</option><option>BEOGA</option><option>WAMENA</option><option>ILAGA</option>
+            </optgroup>
+            <optgroup label="LOGBASE (SENTANI)"><option>TANAH MERAH</option><option>OKSIBIL</option><option>SENGGI</option></optgroup>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Nama Petugas Pelapor <span class="req">*</span></label>
+          <input type="text" id="s-nama-petugas" placeholder="Nama + Pangkat" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+    </div>
+    <!-- SORTIE BLOCKS -->
+    <div id="s-sortie-list"></div>
+    <button class="btn-add-sortie" id="s-btn-add" type="button">＋ Tambah Sortie</button>
+    <!-- GENERATE -->
+    <div class="section-card">
+      <div class="section-body">
+        <button class="btn-generate-sortie" id="s-btn-generate" type="button">⚡ Generate Laporan WA</button>
+        <div id="s-output-area">
+          <textarea class="output-text-field" id="s-output-text" readonly></textarea>
+          <button class="btn-copy" id="s-btn-copy" type="button">📋 Salin ke Clipboard</button>
+          <div class="copy-feedback" id="s-copy-feedback"></div>
+        </div>
+        <button class="btn-reset-form" id="s-btn-reset" type="button">↺ Reset Semua</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: FORM BBM
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-bbm">
+  <header class="dorlog-header">
+    <button class="header-back" onclick="showPage('launcher')">‹ Menu</button>
+    <div class="badge">⛽ Form 2 — Dorlog Satgas Banmin 2026/2027</div>
+    <h1>Stok BBM Avtur Harian</h1>
+    <div class="sub">Batas lapor: 18.00 WIB — Depo &amp; Logbase</div>
+  </header>
+  <div class="container">
+    <!-- IDENTITAS -->
+    <div class="section-card">
+      <div class="b-section-header"><span class="dot"></span>IDENTITAS PELAPOR</div>
+      <div class="section-body">
+        <div class="row-2">
+          <div class="field-group">
+            <label>Tanggal Laporan <span class="req">*</span></label>
+            <input type="date" id="b-tgl-laporan" class="yellow-input">
+          </div>
+          <div class="field-group">
+            <label>Waktu Submit <span class="auto-tag">AUTO</span></label>
+            <input type="text" id="b-waktu-submit" class="auto-field" readonly>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Jenis Pelapor <span class="req">*</span></label>
+          <select id="b-jenis-pelapor">
+            <option value="">— Pilih —</option>
+            <option value="DEPO">PETUGAS DEPO</option>
+            <option value="LOGBASE">PETUGAS LOGBASE</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Nama Lokasi <span class="req">*</span></label>
+          <select id="b-nama-lokasi">
+            <option value="">— Pilih Jenis Pelapor dulu —</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Nama Petugas <span class="req">*</span></label>
+          <input type="text" id="b-nama-petugas" placeholder="Nama + Pangkat" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+    </div>
+    <!-- DATA STOK -->
+    <div class="section-card">
+      <div class="b-section-header"><span class="dot"></span>DATA STOK HARIAN</div>
+      <div class="section-body">
+        <div class="row-2">
+          <div class="field-group">
+            <label>Stok Awal (L) <span class="req">*</span></label>
+            <input type="number" id="b-stok-awal" class="yellow-input" placeholder="0" min="0" inputmode="numeric">
+          </div>
+          <div class="field-group">
+            <label>Ada Penerimaan?</label>
+            <select id="b-ada-penerimaan">
+              <option value="TIDAK">TIDAK</option>
+              <option value="YA">YA</option>
+            </select>
+          </div>
+        </div>
+        <div id="b-blok-penerimaan" class="hidden">
+          <div class="row-2">
+            <div class="field-group">
+              <label>Jumlah Diterima (L) <span class="req">*</span></label>
+              <input type="number" id="b-jml-terima" class="yellow-input" placeholder="0" min="0" inputmode="numeric">
+            </div>
+            <div class="field-group">
+              <label>Sumber <span class="req">*</span></label>
+              <select id="b-sumber-terima">
+                <option value="">— Pilih —</option>
+                <option>Dari Depo TIMIKA</option>
+                <option>Dari Depo SENTANI</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Dokumen Referensi</label>
+            <input type="text" id="b-dok-referensi" placeholder="No. Surat / DO (opsional)" autocapitalize="characters">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Keluar / Pemakaian (L) <span class="req">*</span></label>
+            <input type="number" id="b-keluar-bbm" class="yellow-input" placeholder="0" min="0" inputmode="numeric">
+          </div>
+          <div class="field-group">
+            <label>Stok Akhir Terukur (L) <span class="req">*</span></label>
+            <input type="number" id="b-stok-akhir" class="yellow-input" placeholder="0" min="0" inputmode="numeric">
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="stok-display-label">Total Keluar Terhitung <span class="auto-tag">AUTO</span></div>
+          <div class="stok-display-box" id="b-total-keluar-display">— L</div>
+        </div>
+        <div class="field-group">
+          <div class="stok-display-label">Status Stok Akhir <span class="auto-tag">AUTO</span></div>
+          <div class="stok-display-box" id="b-status-stok-display">—</div>
+        </div>
+        <div class="field-group">
+          <label>Catatan / Anomali</label>
+          <textarea id="b-catatan" rows="2" placeholder="Opsional. Maks 300 karakter." maxlength="300"></textarea>
+        </div>
+      </div>
+    </div>
+    <!-- KHUSUS DEPO -->
+    <div class="section-card" id="b-blok-depo" style="display:none;">
+      <div class="b-section-header"><span class="dot"></span>PENGIRIMAN KE LOGBASE <span style="font-size:9px;opacity:0.7;margin-left:6px;">(KHUSUS DEPO)</span></div>
+      <div class="section-body">
+        <div class="field-group">
+          <label>Ada Pengiriman?</label>
+          <select id="b-ada-pengiriman">
+            <option value="TIDAK">TIDAK</option>
+            <option value="YA">YA</option>
+          </select>
+        </div>
+        <div id="b-kirim-list" class="hidden"></div>
+        <button class="btn-add-kirim hidden" id="b-btn-add-kirim" type="button">＋ Tambah Logbase Tujuan</button>
+        <div id="b-total-kirim-wrap" class="hidden">
+          <div class="stok-display-label" style="margin-top:10px;">Total Dikirim <span class="auto-tag">AUTO</span></div>
+          <div class="stok-display-box" id="b-total-kirim-val">0 L</div>
+        </div>
+      </div>
+    </div>
+    <!-- GENERATE -->
+    <div class="section-card">
+      <div class="section-body">
+        <button class="btn-generate-bbm" id="b-btn-generate" type="button">⚡ Generate Laporan WA</button>
+        <div id="b-output-area">
+          <textarea class="output-text-field" id="b-output-text" readonly></textarea>
+          <button class="btn-copy" id="b-btn-copy" type="button">📋 Salin ke Clipboard</button>
+          <div class="copy-feedback" id="b-copy-feedback"></div>
+        </div>
+        <button class="btn-reset-form" id="b-btn-reset" type="button">↺ Reset Form</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE: FORM HANLOG
+     ══════════════════════════════════════════════════════════ -->
+<div id="page-hanlog">
+  <header class="dorlog-header">
+    <button class="header-back" onclick="showPage('launcher')">‹ Menu</button>
+    <div class="badge">📦 Form 3 — Dorlog Satgas Banmin 2026/2027</div>
+    <h1>Ketahanan Logistik (HanLog)</h1>
+    <div class="sub">Batas lapor: 18.00 WIB — Data terenkripsi via WA</div>
+  </header>
+  <div class="container">
+    <!-- IDENTITAS -->
+    <div class="section-card">
+      <div class="h-section-header"><span class="dot"></span>IDENTITAS PELAPOR</div>
+      <div class="section-body">
+        <div class="row-2">
+          <div class="field-group">
+            <label>Tanggal Laporan <span class="req">*</span></label>
+            <input type="date" id="h-tgl-laporan" class="yellow-input">
+          </div>
+          <div class="field-group">
+            <label>Waktu Submit <span class="auto-tag">AUTO</span></label>
+            <input type="text" id="h-waktu-submit" class="auto-field" readonly>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Satuan <span class="req">*</span></label>
+          <input type="text" id="h-satuan" placeholder="Ketik nama satuan..." autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+          <div class="hint">Autocomplete dari 21 satuan — atau ketik manual</div>
+        </div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Nama Kallan <span class="req">*</span></label>
+            <input type="text" id="h-kallan" placeholder="Nama + Pangkat" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+          </div>
+          <div class="field-group">
+            <label>No. HP Kallan <span class="req">*</span></label>
+            <input type="tel" id="h-hp-kallan" placeholder="08xxxxxxxxxx" inputmode="tel">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Nama Logbase <span class="req">*</span></label>
+          <select id="h-logbase">
+            <option value="">— Pilih Logbase —</option>
+            <optgroup label="DEPO UTAMA"><option>TIMIKA</option><option>SENTANI</option></optgroup>
+            <optgroup label="LOGBASE (TIMIKA)">
+              <option>SINAK</option><option>KENYAM</option><option>ENAROTALI</option>
+              <option>SUGAPA</option><option>BEOGA</option><option>WAMENA</option><option>ILAGA</option>
+            </optgroup>
+            <optgroup label="LOGBASE (SENTANI)"><option>TANAH MERAH</option><option>OKSIBIL</option><option>SENGGI</option></optgroup>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- TK BLOCKS -->
+    <div id="h-tk-list"></div>
+    <button class="btn-add-tk" id="h-btn-add-tk" type="button">＋ Tambah TK</button>
+    <!-- GENERATE -->
+    <div class="section-card">
+      <div class="section-body">
+        <button class="btn-generate-hanlog" id="h-btn-generate" type="button">⚡ Generate Laporan WA</button>
+        <div id="h-output-area">
+          <textarea class="output-text-field" id="h-output-text" readonly></textarea>
+          <button class="btn-copy" id="h-btn-copy" type="button">📋 Salin ke Clipboard</button>
+          <div class="copy-feedback" id="h-copy-feedback"></div>
+        </div>
+        <button class="btn-reset-form" id="h-btn-reset" type="button">↺ Reset Semua</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT — SEMUA LOGIKA
+     ══════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── MASTER DATA ───────────────────────────────────────────────
+const MASTER_ASET = {
+  'HA-5116':'Heli Bell','HA-5117':'Heli Bell','HA-5118':'Heli Bell','HA-5119':'Heli Bell',
+  'HA-5120':'Heli Bell','HA-2205':'Heli Bell','HA-2207':'Heli Bell','HA-2208':'Heli Bell',
+  'FENNEC 7200':'Fennec','Fn-021':'Fennec','FENNEC':'Fennec',
+  'M-001':'Mi 17','M-002':'Mi 17',
+  'C-001':'Caravan Cessna 208','C-002':'Caravan Cessna 208',
+  'H-2209':'Caracal','H-2211':'Caracal',
+  'H-3213':'Super Puma','H-3214':'Super Puma',
+  'C-212-01':'C-212','C-130-01':'C-130','B737-01':'B 737',
+  'TT-3116':'Super Tucano','TT-3110':'Super Tucano'
+};
+const KEL_LOKASI = [
+  'TIMIKA','SENTANI','SINAK','KENYAM','ENAROTALI','SUGAPA','SENGGI',
+  'OKSIBIL','BEOGA','WAMENA','ILAGA','TANAH MERAH',
+  'NABIRE','MANOKWARI','JAYAPURA','AGATS','MERAUKE','BIAK',
+  'MULIA','KARUBAGA','TIOM','KALOME','KOBAKMA','MAMIT','NIPSAN',
+  'OKBIBAB','OKBAPE','KIWIROK','BATOM','OKSAMOL','MOMI',
+  'MAM KROPTAK','ENGGANENGA','PARO','ZANEPA','KENYAM','TETMIED',
+  'SUGAPA','EKNEMBA','JALAI','GAMAGAI','YUGURU'
+];
+const LOGBASE_LIST = ['SINAK','KENYAM','ENAROTALI','SUGAPA','SENGGI','OKSIBIL','BEOGA','WAMENA','ILAGA','TANAH MERAH'];
+const KECEPATAN = {
+  'Heli Bell':220,'Fennec':250,'Mi 17':250,'Caracal':260,'Super Puma':260,
+  'Super Tucano':500,'Caravan Cessna 208':340,'C-212':300,'C-130':540,'B 737':800
+};
+const DAFTAR_TK     = ["MAMBA (KOTIS)", "J2", "BILOGAI", "SILATUGA", "HALOMAMA", "JALAI", "BULAPA", "GAMAGAI", "ILAGA (KOTIS)", "KOPER", "GOME", "BENDUNGAN", "EROMAGA", "WULONI", "TIGILOBAK", "MAYUBERI", "KUGIBUR", "ERALMAKAWIA", "BEOGA (KOTIS)", "BEOGA ATAS", "AMBOBERA", "JULUKOMA", "DANGBET", "JAMPUL", "JENGGEREN", "WANGBE", "MARILAUKIN", "POGAPA (KOTIS)", "BILAI", "AGAPA", "ZANEPA", "ENGGANENGGA", "MAYA", "HIYABU (TK SEMENTARA)", "WANDAI (PEREBUTAN)", "JAE (PEREBUTAN)", "SUGAPA (LOGBASE)", "SINAK BNPB", "TIMOPUT", "TAGALAME", "LAMBERA", "AGENGEN", "PINTU JAWA", "YUMUK", "SINAK PASAR", "HITADIPA (KOSATGAS)", "EKNEMBA", "TITIGI", "SUGAPA LAMA", "MAMBA BAWAH", "SOANGGAMA", "WABUI", "LOGBASE (KOUT)", "UGIMBA (KOSATGAS)", "PIGABU (KOUT)", "UGIMBA BAWAH", "PIGITAPA", "KEMABU", "DONDUPURATA", "BANDARA FAWI", "BANDARA DAGAI", "LOGBASE (SUGAPA)", "KOTIS KENYAM", "QUARY ATAS", "QUARY BAWAH", "KENDIBAM", "ALUGURU", "BATAS BATU", "PELABUHAN AMOR", "NONGGOLOIT", "BANGGABEAK", "MAPENDUMA (KOTIS)", "PARO", "ALFA BRAVO", "GUNUNG WEA", "YUGURU", "TETMID", "SETMID", "MBUA", "YIGI", "DAL", "YAL (KOTIS)", "MUGI", "MAM KROPTAK", "ALBU", "LAPBRIK", "KOTIS", "HALABOK", "CAMAR", "DELTA", "BRAVO", "PJPR", "LOGPON", "KEKEI", "TRIKORA", "KUYAWAGE", "ANDUGUME", "NINGGEYAGIN", "WAMITU", "TUMBUBUR", "WUNAMBUNGGU", "POMA", "BUKIT CAKRA", "MULIA", "KALOME", "DAKOME", "YAMO", "UNDU", "PURBALU", "BALINGUP", "MAWULUK", "POS KOTIS KIMBIM", "PINTU ANGIN", "MOHI", "IBELE", "TAELAREK", "HUWADNAKUL", "MAKKI", "WALAIK", "PDTG SINAK (DEN 1)", "BNPB SINAK (DEN 1)", "TIMOPUT (DEN 1)", "YUMUK (DEN 1)", "SUGAPA (DEN 1)", "RAMIL ILAGA (DEN 2)", "DPRD ILAGA (DEN 2)", "RSUD ILAGA (DEN 2)", "PDTG SINAK (DEN 2)", "TIMOPUT (DEN 3)", "YUMUK (DEN 3)", "YAHUKIMO (DEN 3)", "BNPB SINAK (DEN 3)", "KODIM MULIA (DEN 4)", "KOROWAI (DEN 5)", "IMSUN MAYBRAT (DEN 4)", "KENYAM (DEN 2)", "ENAROTALI (DEN 4)", "NABIRE (DEN 4)", "SETMID (DEN 2)", "SETMID (DENBAN)", "NABIRE (DEN 5)", "NABIRE (DENBAN)", "JALAI (DEN 5)", "JALAI (DENBAN)", "ZANEPA (DEN 5)", "MAMBA (DEN 5)", "MAMBA (DENBAN)", "TATAKRA", "TUALI", "BATOM", "BELEMU", "ABOY", "SABI", "MUARA", "OKSIP", "SUMINKA", "TEIRAPLU", "KOUT KIWIROK", "OKBIBAB", "TOMKA", "TINIBIL", "OKYOP", "KOTIS OKSIBIL", "TARUP", "DENOM", "MIMIN", "OKSOP", "BOMAKIA", "MANGGELUM", "YANIRUMA", "SINAK BANDARA"];
+const DAFTAR_SATUAN = ["YONIF 744", "YONIF 600", "YONIF 731", "YONIF 757", "YONIF 621", "YONIF 315", "YONIF 631", "YONIF 300", "YONIF 623", "YONIF 200", "YONIF 5 MAR", "YONIF 742", "YONIF 613", "YONIF 725", "TIM TAIPUR KOSTRAD", "SATGAS RAJAWALI V", "SATGAS RAJAWALI IV", "YONIF 753 & 121", "YONIF 751 & 753", "YONIF 126 & 403", "SAT ZENI SATGAS BANMIN"];
+const DAFTAR_JENIS  = ["Heli Bell", "Fennec", "Mi 17", "Caravan Cessna 208", "Caracal", "Super Puma", "C-212", "C-130", "B 737", "Super Tucano"];
+const THRESHOLD_DEPO_KRITIS    = 10000;
+const THRESHOLD_LOGBASE_KRITIS = 1000;
+const THRESHOLD_DEPO_WASPADA    = 30000;
+const THRESHOLD_LOGBASE_WASPADA = 3000;
+
+// ── NAVIGASI ─────────────────────────────────────────────────
+function showPage(name) {
+  ['launcher','sortie','bbm','hanlog'].forEach(p => {
+    document.getElementById('page-'+p).style.display = p === name ? 'block' : 'none';
+  });
+  window.scrollTo(0,0);
+}
+
+// ── WAKTU AUTO ────────────────────────────────────────────────
+function updateAllWaktu() {
+  const now = new Date();
+  const d=String(now.getDate()).padStart(2,'0');
+  const mo=String(now.getMonth()+1).padStart(2,'0');
+  const y=now.getFullYear();
+  const h=String(now.getHours()).padStart(2,'0');
+  const mi=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  const str = `${d}/${mo}/${y} ${h}:${mi}:${s}`;
+  ['s-waktu-submit','b-waktu-submit','h-waktu-submit'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = str;
+  });
+}
+updateAllWaktu();
+setInterval(updateAllWaktu, 1000);
+
+function formatTgl(val) {
+  if (!val) return '-';
+  const [y,m,d] = val.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  FORM SORTIE — Logika
+// ═══════════════════════════════════════════════════════
+let sCount = 0, sMisiCounter = 1;
+
+function sGenMisi() {
+  const yr = new Date().getFullYear();
+  const n  = String(sMisiCounter).padStart(3,'0');
+  sMisiCounter++;
+  return `MIS-${yr}-${n}`;
+}
+
+function makeAC(input, data) {
+  const wrap = input.parentNode;
+  wrap.classList.add('ac-wrap');
+  let dd = document.createElement('div');
+  dd.className = 'ac-list';
+  dd.style.display = 'none';
+  wrap.appendChild(dd);
+  input.addEventListener('input', function() {
+    const q = this.value.toUpperCase();
+    if (!q) { dd.style.display='none'; return; }
+    const matches = data.filter(x => x.toUpperCase().includes(q)).slice(0,8);
+    if (!matches.length) { dd.style.display='none'; return; }
+    dd.innerHTML = '';
+    matches.forEach(m => {
+      const item = document.createElement('div');
+      item.textContent = m;
+      item.addEventListener('touchstart', e => { e.preventDefault(); input.value = m; dd.style.display='none'; });
+      item.addEventListener('mousedown', e => { e.preventDefault(); input.value = m; dd.style.display='none'; });
+      dd.appendChild(item);
+    });
+    dd.style.display = 'block';
+  });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) dd.style.display='none'; });
+}
+
+function buildSortie() {
+  sCount++;
+  const idx = sCount;
+  const block = document.createElement('div');
+  block.className = 'sortie-block'; block.id = `s-block-${idx}`;
+  block.innerHTML = `
+    <div class="sortie-block-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="num">${idx}</div>
+        <span>SORTIE ${idx}</span>
+      </div>
+      ${idx>1?`<button class="btn-rm-sortie" type="button" onclick="removeSortie(${idx})">✕ Hapus</button>`:''}
+    </div>
+    <div class="sortie-block-body">
+      <div class="row-2">
+        <div class="field-group">
+          <label>Kode Unit / Tail Number <span class="req">*</span></label>
+          <input type="text" id="s-kode-${idx}" placeholder="Ketik kode unit..." autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="sOnKode(${idx})">
+          <div class="hint">Autocomplete dari daftar — atau ketik manual jika unit baru</div>
+        </div>
+        <div class="field-group">
+          <label>Jenis Pesawat</label>
+          <input type="text" id="s-jenis-${idx}" placeholder="Ketik jenis pesawat..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+          <div class="hint">Autocomplete 10 jenis — atau ketik manual jika jenis baru</div>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>No. Misi <span class="auto-tag">AUTO</span></label>
+          <div class="auto-display" id="s-nomisi-${idx}">${sGenMisi()}</div>
+        </div>
+        <div class="field-group">
+          <label>Jenis Misi <span class="req">*</span></label>
+          <select id="s-jmisi-${idx}">
+            <option value="">— Pilih —</option>
+            <option>LOG</option><option>MED-EVAC</option><option>SAR</option>
+            <option>VIP</option><option>LATIHAN</option><option>TEST FLIGHT</option>
+            <option>FERRY FLIGHT</option><option>PATROLI</option><option>EKSFIL</option>
+            <option>INFIL</option><option>SERPAS</option><option>EVAK</option><option>AIRDROP</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Kapten Penerbangan <span class="req">*</span></label>
+        <input type="text" id="s-kapten-${idx}" placeholder="Nama + Pangkat" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Titik Asal <span class="req">*</span></label>
+          <input type="text" id="s-asal-${idx}" placeholder="Ketik nama lokasi" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="field-group">
+          <label>Tujuan 1 <span class="req">*</span></label>
+          <input type="text" id="s-tj1-${idx}" placeholder="Tujuan utama" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Tujuan 2 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj2-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="field-group">
+          <label>Tujuan 3 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj3-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Tujuan 4 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj4-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="field-group">
+          <label>Tujuan 5 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj5-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Tujuan 6 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj6-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="field-group">
+          <label>Tujuan 7 <span class="opt-tag">OPS</span></label>
+          <input type="text" id="s-tj7-${idx}" placeholder="Opsional" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Titik Akhir <span class="req">*</span></label>
+        <input type="text" id="s-takhir-${idx}" placeholder="Lokasi akhir pesawat" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Jarak Manual (km) <span class="opt-tag">OPS</span></label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="text" id="s-jarak-${idx}" placeholder="Contoh: 463,5" inputmode="decimal" pattern="[0-9]*[,.]?[0-9]*" style="flex:1;">
+            <button type="button" class="btn-koma" onclick="insertKoma('s-jarak-${idx}')">&#44;</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Jam Terbang Aktual <span class="req">*</span></label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="text" id="s-jam-${idx}" placeholder="Contoh: 2,75" inputmode="decimal" pattern="[0-9]*[,.]?[0-9]*" style="flex:1;">
+            <button type="button" class="btn-koma" onclick="insertKoma('s-jam-${idx}')">&#44;</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Mission Status <span class="req">*</span></label>
+        <select id="s-mstatus-${idx}" onchange="sOnStatus(${idx})">
+          <option value="">— Pilih —</option>
+          <option>SUCCESS</option><option>RTB</option><option>RON</option>
+          <option>CANCEL FLIGHT</option><option>TEST FLIGHT</option>
+        </select>
+      </div>
+      <div id="s-wrap-alasan-${idx}" class="cond-hidden field-group">
+        <label>Alasan Cancel <span class="req">*</span></label>
+        <input type="text" id="s-alasan-${idx}" placeholder="Jelaskan alasan pembatalan" autocapitalize="characters">
+      </div>
+      <!-- MUATAN -->
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;">Muatan</div>
+      <div class="row-3">
+        <div class="field-group">
+          <label>Personel (Org)</label>
+          <input type="number" id="s-pax-${idx}" placeholder="0" min="0" inputmode="numeric" oninput="sCalcMuat(${idx})">
+        </div>
+        <div class="field-group">
+          <label>Makanan (Kg)</label>
+          <input type="number" id="s-makan-${idx}" placeholder="0" min="0" inputmode="numeric" oninput="sCalcMuat(${idx})">
+        </div>
+        <div class="field-group">
+          <label>Lain-lain (Kg)</label>
+          <input type="number" id="s-lain-${idx}" placeholder="0" min="0" inputmode="numeric" oninput="sCalcMuat(${idx})">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Total Muat <span class="auto-tag">AUTO</span></label>
+        <div class="auto-display" id="s-totalmuat-${idx}">0 Kg</div>
+      </div>
+      <!-- BBM -->
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;">Data BBM</div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>BBM Awal (L) <span class="req">*</span></label>
+          <input type="number" id="s-bbmawal-${idx}" class="yellow-input" placeholder="0" min="0" inputmode="numeric" oninput="sCalcBBM(${idx})">
+        </div>
+        <div class="field-group">
+          <label>BBM Akhir (L) <span class="req">*</span></label>
+          <input type="number" id="s-bbmakhir-${idx}" class="yellow-input" placeholder="0" min="0" inputmode="numeric" oninput="sCalcBBM(${idx})">
+        </div>
+      </div>
+      <div class="refuel-block">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#1a5a8a;margin-bottom:8px;">REFUEL (Opsional)</div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Refuel 1 — Lokasi</label>
+            <input type="text" id="s-ref1lok-${idx}" placeholder="Nama lokasi" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="sCalcBBM(${idx})">
+          </div>
+          <div class="field-group">
+            <label>Refuel 1 — Jumlah (L)</label>
+            <input type="number" id="s-ref1jml-${idx}" placeholder="0" min="0" inputmode="numeric" oninput="sCalcBBM(${idx})">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field-group">
+            <label>Refuel 2 — Lokasi</label>
+            <input type="text" id="s-ref2lok-${idx}" placeholder="Nama lokasi" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="sCalcBBM(${idx})">
+          </div>
+          <div class="field-group">
+            <label>Refuel 2 — Jumlah (L)</label>
+            <input type="number" id="s-ref2jml-${idx}" placeholder="0" min="0" inputmode="numeric" oninput="sCalcBBM(${idx})">
+          </div>
+        </div>
+      </div>
+      <div class="field-group" style="margin-top:10px;">
+        <label>Konsumsi BBM <span class="auto-tag">AUTO</span></label>
+        <div class="auto-display" id="s-konsumsi-${idx}">— L</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('s-sortie-list').appendChild(block);
+  // Setup autocomplete
+  const kodeEl = document.getElementById('s-kode-'+idx);
+  if (kodeEl) makeAC(kodeEl, Object.keys(MASTER_ASET));
+  const jenisEl = document.getElementById('s-jenis-'+idx);
+  if (jenisEl) makeAC(jenisEl, DAFTAR_JENIS);
+  const lokInputs = ['s-asal-','s-tj1-','s-tj2-','s-tj3-','s-tj4-','s-tj5-','s-tj6-','s-tj7-','s-takhir-','s-ref1lok-','s-ref2lok-'];
+  lokInputs.forEach(prefix => {
+    const el = document.getElementById(prefix+idx);
+    if (el) makeAC(el, KEL_LOKASI);
+  });
+  // Uppercase fields
+  ['s-kapten-','s-alasan-'].forEach(prefix => {
+    const el = document.getElementById(prefix+idx);
+    if (el) el.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+  });
+}
+
+function removeSortie(idx) {
+  const el = document.getElementById('s-block-'+idx);
+  if (el) el.remove();
+}
+function sOnKode(idx) {
+  const kode = document.getElementById('s-kode-'+idx).value.trim().toUpperCase();
+  document.getElementById('s-kode-'+idx).value = kode;
+  // Jenis pesawat diisi manual — Excel yang lookup otomatis via VLOOKUP
+}
+function sOnStatus(idx) {
+  const v = document.getElementById('s-mstatus-'+idx).value;
+  document.getElementById('s-wrap-alasan-'+idx).classList.toggle('cond-hidden', v !== 'CANCEL FLIGHT');
+}
+function sCalcMuat(idx) {
+  const pax   = parseFloat(document.getElementById('s-pax-'+idx).value) || 0;
+  const makan = parseFloat(document.getElementById('s-makan-'+idx).value) || 0;
+  const lain  = parseFloat(document.getElementById('s-lain-'+idx).value) || 0;
+  const total = (pax * 100) + makan + lain;
+  document.getElementById('s-totalmuat-'+idx).textContent = total.toLocaleString('id-ID') + ' Kg';
+}
+function sCalcBBM(idx) {
+  const awal   = parseFloat(document.getElementById('s-bbmawal-'+idx).value) || 0;
+  const akhir  = parseFloat(document.getElementById('s-bbmakhir-'+idx).value) || 0;
+  const r1     = parseFloat(document.getElementById('s-ref1jml-'+idx).value) || 0;
+  const r2     = parseFloat(document.getElementById('s-ref2jml-'+idx).value) || 0;
+  const konsumsi = (awal + r1 + r2) - akhir;
+  const el = document.getElementById('s-konsumsi-'+idx);
+  el.textContent = konsumsi.toLocaleString('id-ID') + ' L';
+  el.style.color = konsumsi < 0 ? 'var(--red)' : '';
+}
+
+document.getElementById('s-btn-add').addEventListener('click', function() {
+  const cur = document.querySelectorAll('.sortie-block').length;
+  if (cur >= 10) { alert('Maksimum 10 sortie per laporan.'); return; }
+  buildSortie();
+});
+document.getElementById('s-nama-petugas').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
+
+// Generate Sortie
+document.getElementById('s-btn-generate').addEventListener('click', function() {
+  const tgl     = document.getElementById('s-tgl-laporan').value;
+  const waktu   = document.getElementById('s-waktu-submit').value;
+  const depo    = document.getElementById('s-nama-depo').value;
+  const petugas = document.getElementById('s-nama-petugas').value.trim();
+  if (!tgl || !depo || !petugas) {
+    alert('⚠ Lengkapi: Tanggal, Depo/Logbase, dan Nama Petugas.');
+    return;
+  }
+  const blocks = document.querySelectorAll('.sortie-block');
+  if (!blocks.length) { alert('⚠ Belum ada data sortie. Tambah sortie terlebih dahulu.'); return; }
+
+  let lines = [];
+  lines.push('=== LAPORAN SORTIE DORLOG ===');
+  lines.push(`TGL: ${formatTgl(tgl)}`);
+  lines.push(`DEPO/LOGBASE: ${depo}`);
+  lines.push(`PETUGAS: ${petugas}`);
+  lines.push(`WAKTU: ${waktu}`);
+  lines.push('');
+
+  blocks.forEach((block, i) => {
+    const idx = block.id.replace('s-block-','');
+    const n = i + 1;
+    const kode    = document.getElementById('s-kode-'+idx).value;
+    const jenis   = document.getElementById('s-jenis-'+idx).textContent;
+    const nomisi  = document.getElementById('s-nomisi-'+idx).textContent;
+    const jmisi   = document.getElementById('s-jmisi-'+idx).value;
+    const kapten  = document.getElementById('s-kapten-'+idx).value.trim();
+    const asal    = document.getElementById('s-asal-'+idx).value.trim();
+    const tj1     = document.getElementById('s-tj1-'+idx).value.trim();
+    const takhir  = document.getElementById('s-takhir-'+idx).value.trim();
+    const jarak   = document.getElementById('s-jarak-'+idx).value;
+    const jam     = document.getElementById('s-jam-'+idx).value;
+    const mstatus = document.getElementById('s-mstatus-'+idx).value;
+    const alasan  = document.getElementById('s-alasan-'+idx).value.trim();
+    const pax     = document.getElementById('s-pax-'+idx).value || '0';
+    const makan   = document.getElementById('s-makan-'+idx).value || '0';
+    const lain    = document.getElementById('s-lain-'+idx).value || '0';
+    const totalMuat = (parseFloat(pax)*100)+parseFloat(makan||0)+parseFloat(lain||0);
+    const bbmAwal  = parseFloat(document.getElementById('s-bbmawal-'+idx).value) || 0;
+    const bbmAkhir = parseFloat(document.getElementById('s-bbmakhir-'+idx).value) || 0;
+    const r1Lok    = document.getElementById('s-ref1lok-'+idx).value.trim();
+    const r1Jml    = parseFloat(document.getElementById('s-ref1jml-'+idx).value) || 0;
+    const r2Lok    = document.getElementById('s-ref2lok-'+idx).value.trim();
+    const r2Jml    = parseFloat(document.getElementById('s-ref2jml-'+idx).value) || 0;
+    const konsumsi = (bbmAwal + r1Jml + r2Jml) - bbmAkhir;
+
+    const errs = [];
+    if (!kode) errs.push('Kode Unit');
+    if (!jmisi) errs.push('Jenis Misi');
+    if (!kapten) errs.push('Kapten');
+    if (!asal) errs.push('Titik Asal');
+    if (!tj1) errs.push('Tujuan 1');
+    if (!takhir) errs.push('Titik Akhir');
+    if (!mstatus) errs.push('Mission Status');
+    if (mstatus === 'CANCEL FLIGHT' && !alasan) errs.push('Alasan Cancel');
+    if (!jam && mstatus !== 'CANCEL FLIGHT') errs.push('Jam Terbang');
+
+    const tujuanList = [tj1];
+    [2,3,4,5,6,7].forEach(n => {
+      const v = document.getElementById(`s-tj${n}-${idx}`).value.trim();
+      if (v) tujuanList.push(v);
+    });
+
+    lines.push(`--- SORTIE ${n} ---`);
+    lines.push(`  NO_MISI: ${nomisi}`);
+    lines.push(`  KODE_UNIT: ${kode || '⚠KOSONG'}`);
+    lines.push(`  JENIS: ${jenis}`);
+    lines.push(`  JENIS_MISI: ${jmisi || '⚠KOSONG'}`);
+    lines.push(`  KAPTEN: ${kapten || '⚠KOSONG'}`);
+    lines.push(`  ASAL: ${asal || '⚠KOSONG'}`);
+    lines.push(`  RUTE: ${tujuanList.join(' → ')}`);
+    lines.push(`  TITIK_AKHIR: ${takhir || '⚠KOSONG'}`);
+    lines.push(`  JARAK_KM: ${jarak ? jarak.replace('.',',') : '-'}`);
+    lines.push(`  JAM_TERBANG: ${jam ? jam.replace('.',',') : '-'}`);
+    lines.push(`  MISI_STATUS: ${mstatus || '⚠KOSONG'}`);
+    if (mstatus === 'CANCEL FLIGHT') lines.push(`  ALASAN_CANCEL: ${alasan || '⚠KOSONG'}`);
+    lines.push(`  MUATAN_PAX: ${pax} Org`);
+    lines.push(`  MUATAN_MAKAN: ${makan} Kg`);
+    lines.push(`  MUATAN_LAIN: ${lain} Kg`);
+    lines.push(`  TOTAL_MUAT: ${totalMuat.toLocaleString('id-ID')} Kg`);
+    lines.push(`  BBM_AWAL: ${bbmAwal.toLocaleString('id-ID')} L`);
+    if (r1Lok || r1Jml > 0) lines.push(`  REFUEL_1: ${r1Lok||'-'} / ${r1Jml.toLocaleString('id-ID')} L`);
+    if (r2Lok || r2Jml > 0) lines.push(`  REFUEL_2: ${r2Lok||'-'} / ${r2Jml.toLocaleString('id-ID')} L`);
+    lines.push(`  BBM_AKHIR: ${bbmAkhir.toLocaleString('id-ID')} L`);
+    lines.push(`  KONSUMSI_BBM: ${konsumsi.toLocaleString('id-ID')} L`);
+    if (errs.length > 0) lines.push(`  STATUS_SORTIE: ⚠ PERINGATAN — ${errs.join(', ')}`);
+    else if (konsumsi < 0) lines.push(`  STATUS_SORTIE: ⚠ CEK DATA BBM`);
+    else lines.push(`  STATUS_SORTIE: SUCCESS`);
+    lines.push('');
+  });
+  lines.push('=== END SORTIE ===');
+
+  const out = lines.join('\n');
+  document.getElementById('s-output-text').value = out;
+  document.getElementById('s-output-area').style.display = 'block';
+  document.getElementById('s-output-area').scrollIntoView({behavior:'smooth'});
+});
+
+// Copy Sortie
+document.getElementById('s-btn-copy').addEventListener('click', function() {
+  copyText('s-output-text','s-copy-feedback');
+});
+document.getElementById('s-btn-reset').addEventListener('click', function() {
+  if (!confirm('Reset semua data sortie?')) return;
+  ['s-tgl-laporan','s-nama-depo','s-nama-petugas'].forEach(id => {
+    document.getElementById(id).value='';
+  });
+  document.getElementById('s-sortie-list').innerHTML = '';
+  document.getElementById('s-output-area').style.display = 'none';
+  sCount = 0; sMisiCounter = 1;
+  buildSortie();
+});
+
+// ═══════════════════════════════════════════════════════
+//  FORM BBM — Logika
+// ═══════════════════════════════════════════════════════
+let bKirimCount = 0;
+
+document.getElementById('b-jenis-pelapor').addEventListener('change', function() {
+  const v = this.value;
+  const sel = document.getElementById('b-nama-lokasi');
+  sel.innerHTML = '<option value="">— Pilih Lokasi —</option>';
+  const list = v === 'DEPO' ? ['TIMIKA','SENTANI'] : LOGBASE_LIST;
+  list.forEach(l => {
+    const o = document.createElement('option');
+    o.value = l; o.textContent = l;
+    sel.appendChild(o);
+  });
+  document.getElementById('b-blok-depo').style.display = v === 'DEPO' ? 'block' : 'none';
+  bUpdateStatus();
+});
+
+document.getElementById('b-ada-penerimaan').addEventListener('change', function() {
+  document.getElementById('b-blok-penerimaan').classList.toggle('hidden', this.value !== 'YA');
+  bUpdateKalkulasi();
+});
+
+function bUpdateKalkulasi() {
+  const awal   = parseFloat(document.getElementById('b-stok-awal').value) || 0;
+  const adaT   = document.getElementById('b-ada-penerimaan').value === 'YA';
+  const terima = adaT ? (parseFloat(document.getElementById('b-jml-terima').value) || 0) : 0;
+  const akhir  = parseFloat(document.getElementById('b-stok-akhir').value) || 0;
+  const total  = (awal + terima) - akhir;
+  const el     = document.getElementById('b-total-keluar-display');
+  el.textContent = total >= 0 ? `${total.toLocaleString('id-ID')} L` : `⚠ NEGATIF (${total.toLocaleString('id-ID')} L)`;
+  el.className   = 'stok-display-box' + (total < 0 ? ' danger' : '');
+  bUpdateStatus();
+}
+function bUpdateStatus() {
+  const jenis = document.getElementById('b-jenis-pelapor').value;
+  const akhir = parseFloat(document.getElementById('b-stok-akhir').value) || 0;
+  const el    = document.getElementById('b-status-stok-display');
+  if (!jenis || !document.getElementById('b-stok-akhir').value) {
+    el.textContent = '—'; el.className = 'stok-display-box'; return;
+  }
+  const kritis  = jenis === 'DEPO' ? THRESHOLD_DEPO_KRITIS    : THRESHOLD_LOGBASE_KRITIS;
+  const waspada = jenis === 'DEPO' ? THRESHOLD_DEPO_WASPADA    : THRESHOLD_LOGBASE_WASPADA;
+  if (akhir < kritis) {
+    el.textContent = `🔴 KRITIS — ${akhir.toLocaleString('id-ID')} L (batas ${kritis.toLocaleString('id-ID')} L)`;
+    el.className = 'stok-display-box danger';
+  } else if (akhir < waspada) {
+    el.textContent = `🟡 WASPADA — ${akhir.toLocaleString('id-ID')} L`;
+    el.className = 'stok-display-box warn';
+  } else {
+    el.textContent = `🟢 AMAN — ${akhir.toLocaleString('id-ID')} L`;
+    el.className = 'stok-display-box';
+  }
+}
+['b-stok-awal','b-jml-terima','b-stok-akhir','b-keluar-bbm'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', bUpdateKalkulasi);
+});
+
+document.getElementById('b-ada-pengiriman').addEventListener('change', function() {
+  const show = this.value === 'YA';
+  document.getElementById('b-kirim-list').classList.toggle('hidden', !show);
+  document.getElementById('b-btn-add-kirim').classList.toggle('hidden', !show);
+  document.getElementById('b-total-kirim-wrap').classList.toggle('hidden', !show);
+  if (show && bKirimCount === 0) bAddKirim();
+  bUpdateTotalKirim();
+});
+
+function bAddKirim() {
+  bKirimCount++;
+  const idx = bKirimCount;
+  const list = document.getElementById('b-kirim-list');
+  const opts = LOGBASE_LIST.map(l => `<option>${l}</option>`).join('');
+  const div = document.createElement('div');
+  div.id = `b-kirim-${idx}`;
+  div.className = 'kirim-block';
+  div.innerHTML = `
+    <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#1a5a8a;margin-bottom:8px;">TUJUAN ${idx}</div>
+    <div class="row-2">
+      <div class="field-group">
+        <label>Logbase Tujuan</label>
+        <select id="b-klb-${idx}" onchange="bUpdateTotalKirim()">
+          <option value="">— Pilih —</option>${opts}
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Jumlah (L)</label>
+        <input type="number" id="b-kjml-${idx}" min="0" placeholder="0" inputmode="numeric" oninput="bUpdateTotalKirim()">
+      </div>
+    </div>
+    ${idx>1?`<button class="btn-rm-kirim" type="button" onclick="bRemoveKirim(${idx})">✕ Hapus Tujuan ${idx}</button>`:''}
+  `;
+  list.appendChild(div);
+}
+function bRemoveKirim(idx) {
+  const el = document.getElementById('b-kirim-'+idx);
+  if (el) el.remove();
+  bUpdateTotalKirim();
+}
+function bUpdateTotalKirim() {
+  let total = 0;
+  for (let i = 1; i <= bKirimCount; i++) {
+    const el = document.getElementById('b-kjml-'+i);
+    if (el) total += parseFloat(el.value) || 0;
+  }
+  document.getElementById('b-total-kirim-val').textContent = `${total.toLocaleString('id-ID')} L`;
+}
+document.getElementById('b-btn-add-kirim').addEventListener('click', function() {
+  const n = document.querySelectorAll('[id^="b-kirim-"]').length;
+  if (n >= 3) { alert('Maks 3 Logbase tujuan.'); return; }
+  bAddKirim();
+});
+document.getElementById('b-nama-petugas').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+});
+
+document.getElementById('b-btn-generate').addEventListener('click', function() {
+  const tgl     = document.getElementById('b-tgl-laporan').value;
+  const waktu   = document.getElementById('b-waktu-submit').value;
+  const jenis   = document.getElementById('b-jenis-pelapor').value;
+  const lokasi  = document.getElementById('b-nama-lokasi').value;
+  const petugas = document.getElementById('b-nama-petugas').value.trim();
+  const stokAwal= document.getElementById('b-stok-awal').value;
+  const stokAkh = document.getElementById('b-stok-akhir').value;
+  const keluar  = document.getElementById('b-keluar-bbm').value;
+  const adaT    = document.getElementById('b-ada-penerimaan').value === 'YA';
+  const jmlT    = document.getElementById('b-jml-terima').value;
+  const sumber  = document.getElementById('b-sumber-terima').value;
+
+  const errs = [];
+  if (!tgl) errs.push('Tanggal'); if (!jenis) errs.push('Jenis Pelapor');
+  if (!lokasi) errs.push('Nama Lokasi'); if (!petugas) errs.push('Nama Petugas');
+  if (!stokAwal) errs.push('Stok Awal'); if (!stokAkh) errs.push('Stok Akhir');
+  if (!keluar) errs.push('Keluar/Pemakaian');
+  if (adaT && !jmlT) errs.push('Jumlah Diterima');
+  if (adaT && !sumber) errs.push('Sumber Penerimaan');
+  if (errs.length) { alert('⚠ Wajib diisi:\n' + errs.join('\n')); return; }
+
+  const sawal   = parseFloat(stokAwal) || 0;
+  const sterima = adaT ? (parseFloat(jmlT) || 0) : 0;
+  const sakhir  = parseFloat(stokAkh) || 0;
+  const totalK  = (sawal + sterima) - sakhir;
+  const kritis  = jenis === 'DEPO' ? THRESHOLD_DEPO_KRITIS    : THRESHOLD_LOGBASE_KRITIS;
+  const waspada = jenis === 'DEPO' ? THRESHOLD_DEPO_WASPADA    : THRESHOLD_LOGBASE_WASPADA;
+  const statusStok = sakhir < kritis ? 'KRITIS' : sakhir < waspada ? 'WASPADA' : 'AMAN';
+
+  let lines = [];
+  lines.push('=== LAPORAN BBM AVTUR DORLOG ===');
+  lines.push(`TGL: ${formatTgl(tgl)}`);
+  lines.push(`JENIS_PELAPOR: ${jenis === 'DEPO' ? 'PETUGAS DEPO' : 'PETUGAS LOGBASE'}`);
+  lines.push(`LOKASI: ${lokasi}`);
+  lines.push(`PETUGAS: ${petugas}`);
+  lines.push(`WAKTU: ${waktu}`);
+  lines.push('');
+  lines.push('--- DATA STOK ---');
+  lines.push(`  STOK_AWAL: ${sawal.toLocaleString('id-ID')} L`);
+  if (adaT) {
+    lines.push(`  PENERIMAAN: ${sterima.toLocaleString('id-ID')} L`);
+    lines.push(`  SUMBER: ${sumber}`);
+    const dok = document.getElementById('b-dok-referensi').value.trim();
+    if (dok) lines.push(`  DOK_REF: ${dok}`);
+  } else {
+    lines.push(`  PENERIMAAN: TIDAK ADA`);
+  }
+  lines.push(`  KELUAR_PEMAKAIAN: ${(parseFloat(keluar)||0).toLocaleString('id-ID')} L`);
+  lines.push(`  STOK_AKHIR: ${sakhir.toLocaleString('id-ID')} L`);
+  lines.push(`  TOTAL_KELUAR_TERHITUNG: ${totalK.toLocaleString('id-ID')} L`);
+  lines.push(`  STATUS_STOK: ${statusStok}`);
+  const cat = document.getElementById('b-catatan').value.trim();
+  if (cat) lines.push(`  CATATAN: ${cat}`);
+
+  if (jenis === 'DEPO') {
+    lines.push('');
+    lines.push('--- PENGIRIMAN KE LOGBASE ---');
+    const adaKirim = document.getElementById('b-ada-pengiriman').value === 'YA';
+    if (!adaKirim) {
+      lines.push('  PENGIRIMAN: TIDAK ADA');
+    } else {
+      let totK = 0; let hasK = false;
+      for (let i = 1; i <= bKirimCount; i++) {
+        const lb  = document.getElementById('b-klb-'+i);
+        const jml = document.getElementById('b-kjml-'+i);
+        if (!lb || !jml) continue;
+        const lv = lb.value.trim(); const jv = parseFloat(jml.value)||0;
+        if (lv || jv > 0) {
+          lines.push(`  KIRIM_${i}: ${lv||'⚠KOSONG'} — ${jv.toLocaleString('id-ID')} L`);
+          totK += jv; hasK = true;
+        }
+      }
+      if (!hasK) lines.push('  (tidak ada data pengiriman)');
+      else lines.push(`  TOTAL_KIRIM: ${totK.toLocaleString('id-ID')} L`);
+    }
+  }
+  lines.push('');
+  if (totalK < 0) lines.push('⚠ PERINGATAN: Stok keluar negatif — cek data!');
+  lines.push('=== END BBM ===');
+
+  document.getElementById('b-output-text').value = lines.join('\n');
+  document.getElementById('b-output-area').style.display = 'block';
+  document.getElementById('b-output-area').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('b-btn-copy').addEventListener('click', function() {
+  copyText('b-output-text','b-copy-feedback');
+});
+document.getElementById('b-btn-reset').addEventListener('click', function() {
+  if (!confirm('Reset form BBM?')) return;
+  ['b-tgl-laporan','b-jenis-pelapor','b-nama-petugas','b-stok-awal','b-jml-terima',
+   'b-dok-referensi','b-keluar-bbm','b-stok-akhir','b-catatan'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('b-nama-lokasi').innerHTML = '<option value="">— Pilih Jenis Pelapor dulu —</option>';
+  document.getElementById('b-ada-penerimaan').value = 'TIDAK';
+  document.getElementById('b-blok-penerimaan').classList.add('hidden');
+  document.getElementById('b-sumber-terima').value = '';
+  document.getElementById('b-blok-depo').style.display = 'none';
+  document.getElementById('b-ada-pengiriman').value = 'TIDAK';
+  document.getElementById('b-kirim-list').innerHTML = '';
+  document.getElementById('b-kirim-list').classList.add('hidden');
+  document.getElementById('b-btn-add-kirim').classList.add('hidden');
+  document.getElementById('b-total-kirim-wrap').classList.add('hidden');
+  document.getElementById('b-total-keluar-display').textContent = '— L';
+  document.getElementById('b-total-keluar-display').className = 'stok-display-box';
+  document.getElementById('b-status-stok-display').textContent = '—';
+  document.getElementById('b-status-stok-display').className = 'stok-display-box';
+  document.getElementById('b-output-area').style.display = 'none';
+  bKirimCount = 0;
+});
+
+// ═══════════════════════════════════════════════════════
+//  FORM HANLOG — Logika
+// ═══════════════════════════════════════════════════════
+let hCount = 0;
+
+function buildTK() {
+  hCount++;
+  const idx = hCount;
+  const block = document.createElement('div');
+  block.className = 'tk-block'; block.id = `h-tk-${idx}`;
+  block.innerHTML = `
+    <div class="tk-block-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="num">${idx}</div>
+        <span>TK / POS ${idx}</span>
+      </div>
+      ${idx>1?`<button class="btn-rm-tk" type="button" onclick="removeTK(${idx})">✕ Hapus</button>`:''}
+    </div>
+    <div class="tk-block-body">
+      <div class="field-group">
+        <label>Nama TK <span class="req">*</span></label>
+        <input type="text" id="h-namatk-${idx}" placeholder="Ketik nama TK..." autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        <div class="hint">Autocomplete dari 173 TK — atau ketik manual jika TK baru</div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Tipe TK <span class="req">*</span></label>
+          <select id="h-tipetk-${idx}">
+            <option value="">— Pilih —</option>
+            <option>TK DARAT</option><option>TK UDARA</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Jml Personel (Org) <span class="req">*</span></label>
+          <input type="number" id="h-pers-${idx}" placeholder="0" min="0" inputmode="numeric">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Stok Logistik (Kg) <span class="req">*</span></label>
+          <input type="number" id="h-stok-${idx}" class="yellow-input" placeholder="0" min="0" inputmode="numeric">
+        </div>
+        <div class="field-group">
+          <label>Tahan S/D Tanggal <span class="req">*</span></label>
+          <input type="date" id="h-tahan-${idx}" class="yellow-input" onchange="hCalcStatus(${idx})">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label>Sisa Hari <span class="auto-tag">AUTO</span></label>
+          <div class="auto-display" id="h-sisahari-${idx}">—</div>
+        </div>
+        <div class="field-group">
+          <label>Status <span class="auto-tag">AUTO</span></label>
+          <div class="status-auto s-kosong" id="h-status-${idx}">—</div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Butuh Sortie?</label>
+        <select id="h-sortie-${idx}" onchange="hOnSortie(${idx})">
+          <option value="TIDAK">TIDAK</option>
+          <option value="YA">YA</option>
+          <option value="DARURAT">DARURAT</option>
+        </select>
+      </div>
+      <div id="h-wrap-kebutuhan-${idx}" class="cond-hidden field-group">
+        <label>Estimasi Kebutuhan (Kg) <span class="req">*</span></label>
+        <input type="number" id="h-kebutuhan-${idx}" placeholder="0" min="0" inputmode="numeric">
+      </div>
+      <div class="field-group">
+        <label>Catatan</label>
+        <textarea id="h-catatan-${idx}" rows="2" placeholder="Opsional. Maks 500 karakter." maxlength="500"></textarea>
+      </div>
+    </div>
+  `;
+  document.getElementById('h-tk-list').appendChild(block);
+  // Autocomplete Nama TK
+  const namaTK = document.getElementById('h-namatk-'+idx);
+  if (namaTK) makeAC(namaTK, DAFTAR_TK);
+  // Uppercase tetap untuk karakter yang diketik manual
+  namaTK.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+}
+
+function removeTK(idx) {
+  const el = document.getElementById('h-tk-'+idx);
+  if (el) el.remove();
+}
+function hCalcStatus(idx) {
+  const tahan = document.getElementById('h-tahan-'+idx).value;
+  if (!tahan) {
+    document.getElementById('h-sisahari-'+idx).textContent = '—';
+    document.getElementById('h-status-'+idx).textContent = '—';
+    document.getElementById('h-status-'+idx).className = 'status-auto s-kosong';
+    return;
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tgl   = new Date(tahan); tgl.setHours(0,0,0,0);
+  const sisa  = Math.round((tgl - today) / 86400000);
+  document.getElementById('h-sisahari-'+idx).textContent = sisa + ' hari';
+
+  let statusText, statusClass;
+  if (sisa > 3)           { statusText='AMAN';    statusClass='s-aman'; }
+  else if (sisa >= 0)     { statusText='WASPADA'; statusClass='s-waspada'; }
+  else if (sisa >= -3)    { statusText='MINUS';   statusClass='s-minus'; }
+  else                    { statusText='KRITIS';  statusClass='s-kritis'; }
+
+  document.getElementById('h-status-'+idx).textContent = statusText;
+  document.getElementById('h-status-'+idx).className = 'status-auto ' + statusClass;
+}
+function hOnSortie(idx) {
+  const v = document.getElementById('h-sortie-'+idx).value;
+  document.getElementById('h-wrap-kebutuhan-'+idx).classList.toggle('cond-hidden', v === 'TIDAK');
+}
+
+document.getElementById('h-btn-add-tk').addEventListener('click', function() {
+  buildTK();
+});
+// Autocomplete Satuan
+const satuanEl = document.getElementById('h-satuan');
+if (satuanEl) {
+  makeAC(satuanEl, DAFTAR_SATUAN);
+  satuanEl.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+}
+// Uppercase Kallan
+const kallanEl = document.getElementById('h-kallan');
+if (kallanEl) kallanEl.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+
+document.getElementById('h-btn-generate').addEventListener('click', function() {
+  const tgl     = document.getElementById('h-tgl-laporan').value;
+  const waktu   = document.getElementById('h-waktu-submit').value;
+  const satuan  = document.getElementById('h-satuan').value.trim();
+  const kallan  = document.getElementById('h-kallan').value.trim();
+  const hp      = document.getElementById('h-hp-kallan').value.trim();
+  const logbase = document.getElementById('h-logbase').value;
+
+  if (!tgl || !satuan || !kallan || !hp || !logbase) {
+    alert('⚠ Lengkapi semua field identitas pelapor.'); return;
+  }
+  const blocks = document.querySelectorAll('.tk-block');
+  if (!blocks.length) { alert('⚠ Belum ada data TK. Tambah TK terlebih dahulu.'); return; }
+
+  let lines = [];
+  lines.push('=== LAPORAN HANLOG DORLOG ===');
+  lines.push(`TGL: ${formatTgl(tgl)}`);
+  lines.push(`SATUAN: ${satuan}`);
+  lines.push(`KALLAN: ${kallan}`);
+  lines.push(`HP: ${hp}`);
+  lines.push(`WAKTU: ${waktu}`);
+  lines.push(`--- LOGBASE: ${logbase} ---`);
+  lines.push('');
+
+  blocks.forEach((block, i) => {
+    const idx    = block.id.replace('h-tk-','');
+    const n      = i + 1;
+    const nama   = document.getElementById('h-namatk-'+idx).value.trim();
+    const tipe   = document.getElementById('h-tipetk-'+idx).value;
+    const pers   = document.getElementById('h-pers-'+idx).value || '0';
+    const stok   = document.getElementById('h-stok-'+idx).value || '0';
+    const tahan  = document.getElementById('h-tahan-'+idx).value;
+    const sisa   = document.getElementById('h-sisahari-'+idx).textContent;
+    const status = document.getElementById('h-status-'+idx).textContent;
+    const sortie = document.getElementById('h-sortie-'+idx).value;
+    const kebEl  = document.getElementById('h-kebutuhan-'+idx);
+    const kebVal = kebEl ? kebEl.value : '';
+    const cat    = document.getElementById('h-catatan-'+idx).value.trim();
+
+    lines.push(`TK_${String(n).padStart(3,'0')}:`);
+    lines.push(`  NAMA_TK: ${nama || '⚠KOSONG'}`);
+    lines.push(`  JML_PERS: ${pers}`);
+    lines.push(`  STOK_KG: ${stok}`);
+    lines.push(`  TAHAN_TGL: ${formatTgl(tahan)}`);
+    lines.push(`  SISA_HARI: ${sisa}`);
+    lines.push(`  STATUS: ${status}`);
+    lines.push(`  TIPE_TK: ${tipe || '⚠KOSONG'}`);
+    lines.push(`  BUTUH_SORTIE: ${sortie}`);
+    if (sortie !== 'TIDAK') {
+      lines.push(`  EST_KEBUTUHAN: ${kebVal || '⚠KOSONG'} Kg`);
+    }
+    lines.push(`  CATATAN: ${cat || '-'}`);
+    lines.push('');
+  });
+  lines.push('=== END HANLOG ===');
+
+  document.getElementById('h-output-text').value = lines.join('\n');
+  document.getElementById('h-output-area').style.display = 'block';
+  document.getElementById('h-output-area').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('h-btn-copy').addEventListener('click', function() {
+  copyText('h-output-text','h-copy-feedback');
+});
+document.getElementById('h-btn-reset').addEventListener('click', function() {
+  if (!confirm('Reset semua data HanLog?')) return;
+  ['h-tgl-laporan','h-satuan','h-kallan','h-hp-kallan'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('h-logbase').value = '';
+  document.getElementById('h-tk-list').innerHTML = '';
+  document.getElementById('h-output-area').style.display = 'none';
+  hCount = 0;
+  buildTK();
+});
+
+// ═══════════════════════════════════════════════════════
+//  SHARED UTILITIES
+// ═══════════════════════════════════════════════════════
+function insertKoma(fieldId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  const val = el.value;
+  // Jika sudah ada koma, tidak tambah lagi
+  if (val.includes(',')) {
+    el.focus(); return;
+  }
+  el.value = val + ',';
+  el.focus();
+  el.setSelectionRange(el.value.length, el.value.length);
+}
+function copyText(textareaId, feedbackId) {
+  const text = document.getElementById(textareaId).value;
+  const fb   = document.getElementById(feedbackId);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      fb.textContent = '✅ Disalin! Buka WhatsApp dan paste.';
+      setTimeout(() => fb.textContent = '', 3000);
+    }).catch(() => fallbackCopy(textareaId, feedbackId));
+  } else {
+    fallbackCopy(textareaId, feedbackId);
+  }
+}
+function fallbackCopy(textareaId, feedbackId) {
+  const ta = document.getElementById(textareaId);
+  const fb = document.getElementById(feedbackId);
+  ta.select(); ta.setSelectionRange(0, 99999);
+  try {
+    document.execCommand('copy');
+    fb.textContent = '✅ Disalin! Buka WhatsApp dan paste.';
+  } catch(e) {
+    fb.textContent = '⚠ Salin manual: tekan lama pada teks di atas.';
+  }
+  setTimeout(() => fb.textContent = '', 3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+buildSortie(); // init sortie pertama
+buildTK();     // init TK pertama
+</script>
+</body>
+</html>
