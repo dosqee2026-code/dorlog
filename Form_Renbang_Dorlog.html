@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Renbang Penerbangan — Dorlog</title>
+<style>
+:root{
+  --navy:#0d1b2a;--navy-mid:#1b2d42;--gold:#c8a44a;--gold-light:#e0bc72;
+  --green:#2e7d52;--red:#c0392b;--blue:#1a6fa8;--amber:#d4a017;
+  --bg:#f0f2f5;--card:#fff;--text:#1a1a2e;--muted:#5a6a7a;--border:#d0d8e4;
+  --yellow-bg:#fff8e6;--yellow-border:#e8c840;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;padding-bottom:60px}
+header{background:linear-gradient(135deg,#4a1a6a,#2d0a4a);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+header .badge{font-size:9px;font-weight:700;letter-spacing:2px;color:#d4a0f0;text-transform:uppercase;margin-bottom:3px}
+header h1{font-size:17px}
+header .sub{font-size:11px;opacity:.7;margin-top:2px}
+.container{max-width:640px;margin:0 auto;padding:14px 12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-h{background:linear-gradient(90deg,#2d0a4a,#4a1a6a);color:#d4a0f0;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+.card-b{padding:14px}
+label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;margin-top:10px}
+label:first-child{margin-top:0}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;background:#f8fafc;font-family:inherit;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#9060c0;background:#fff}
+.req{color:var(--red)}
+.btn{padding:12px 18px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;-webkit-appearance:none;width:100%;margin-top:8px}
+.btn-primary{background:linear-gradient(135deg,#2d0a4a,#4a1a6a);color:#d4a0f0}
+.btn-green{background:var(--green);color:#fff}
+.btn-red{background:transparent;border:1.5px solid var(--red);color:var(--red)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-sm{padding:8px 14px;font-size:13px;width:auto}
+.btn:active{opacity:.85}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sortie-block{background:#faf5ff;border:1.5px solid #cba8f0;border-radius:10px;padding:12px;margin-bottom:10px;position:relative}
+.sortie-block-title{font-size:11px;font-weight:700;color:#4a1a6a;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.del-btn{position:absolute;top:10px;right:10px;background:none;border:none;font-size:18px;color:var(--red);cursor:pointer;padding:2px 6px;line-height:1}
+.rute-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.rute-row input{flex:1}
+.rute-del{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:2px 6px;min-width:30px}
+.rute-add{font-size:12px;font-weight:600;color:#4a1a6a;background:#efe8f8;border:1.5px dashed #9060c0;border-radius:6px;padding:7px;width:100%;cursor:pointer;text-align:center;margin-top:4px}
+.ac-wrap{position:relative}
+.ac-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #9060c0;border-top:none;border-radius:0 0 8px 8px;max-height:160px;overflow-y:auto;z-index:50;display:none}
+.ac-item{padding:8px 12px;font-size:13px;cursor:pointer}
+.ac-item:hover{background:#efe8f8}
+.output-area{background:#1a0a2a;color:#d4a0f0;padding:14px;border-radius:10px;font-family:'Courier New',monospace;font-size:11.5px;line-height:1.7;white-space:pre-wrap;word-break:break-word;display:none;margin-top:12px}
+.no-renbang{font-size:11px;color:#9060c0;font-style:italic;background:#efe8f8;padding:4px 10px;border-radius:6px}
+.btn-koma{display:inline-block;background:#efe8f8;border:1px solid #9060c0;color:#4a1a6a;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;cursor:pointer;margin-top:4px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">📋 Dorlog — Satgas Banmin 2026/2027</div>
+  <h1>Form Rencana Penerbangan</h1>
+  <div class="sub">Deadline pengiriman: 22.00 WIB — untuk operasi hari berikutnya</div>
+</header>
+<div class="container">
+
+  <!-- HEADER RENBANG -->
+  <div class="card">
+    <div class="card-h">DATA RENCANA PENERBANGAN</div>
+    <div class="card-b">
+      <label>Tanggal Rencana (hari operasi) <span class="req">*</span></label>
+      <input type="date" id="r-tgl">
+      <label>Nama Perencana <span class="req">*</span></label>
+      <input type="text" id="r-perencana" placeholder="Nama + Pangkat" style="text-transform:uppercase">
+      <label>Satuan Tugas / Jabatan</label>
+      <input type="text" id="r-jabatan" placeholder="Contoh: PASI LOG BANMIN" style="text-transform:uppercase">
+    </div>
+  </div>
+
+  <!-- BLOK SORTIE RENBANG -->
+  <div id="r-blok-container"></div>
+  <button class="btn btn-blue" id="r-btn-add" style="margin-bottom:12px">＋ Tambah Rencana Sortie</button>
+
+  <!-- TOMBOL GENERATE -->
+  <button class="btn btn-primary" id="r-btn-generate">📋 Generate Teks WA</button>
+  <div class="output-area" id="r-output"></div>
+  <button class="btn btn-green hidden" id="r-btn-copy">⎘ Salin Teks</button>
+  <button class="btn btn-red hidden" id="r-btn-reset" style="margin-top:6px">↺ Reset Form</button>
+
+</div>
+
+<script>
+'use strict';
+
+const MASTER_ASET={'HA-5116':'Heli Bell','HA-5117':'Heli Bell','HA-5118':'Heli Bell','HA-5119':'Heli Bell','HA-5120':'Heli Bell','HA-2205':'Heli Bell','HA-2207':'Heli Bell','HA-2208':'Heli Bell','FENNEC 7200':'Fennec','Fn-021':'Fennec','FENNEC':'Fennec','M-001':'Mi 17','M-002':'Mi 17','C-001':'Caravan Cessna 208','C-002':'Caravan Cessna 208','H-2209':'Caracal','H-2211':'Caracal','H-3213':'Super Puma','H-3214':'Super Puma','C-212-01':'C-212','C-130-01':'C-130','B737-01':'B 737','TT-3116':'Super Tucano','TT-3110':'Super Tucano'};
+const DAFTAR_SATUAN=["YONIF 744","YONIF 600","YONIF 731","YONIF 757","YONIF 621","YONIF 315","YONIF 631","YONIF 300","YONIF 623","YONIF 200","YONIF 5 MAR","YONIF 742","YONIF 613","YONIF 725","TIM TAIPUR KOSTRAD","SATGAS RAJAWALI V","SATGAS RAJAWALI IV","SAT ZENI SATGAS BANMIN"];
+const KEL_LOKASI=['TIMIKA','SENTANI','SINAK','KENYAM','ENAROTALI','SUGAPA','SENGGI','OKSIBIL','BEOGA','WAMENA','ILAGA','TANAH MERAH','NABIRE','JAYAPURA','MULIA','MAM KROPTAK','ENGGANENGA','PARO','ZANEPA','TETMIED','EKNEMBA','JALAI','GAMAGAI','YUGURU','WABUI','ARWANOP','KILIARMA','TSINGA','POGAPA','BILAI','AGAPA','MAYA','HIYABU'];
+
+let blockCount = 0;
+let noRenbang  = 1;
+
+// ── Autocomplete ────────────────────────────────────────────────
+function makeAC(inp, list) {
+  const wrap = inp.parentElement;
+  let drop = wrap.querySelector('.ac-list');
+  if (!drop) { drop = document.createElement('div'); drop.className='ac-list'; wrap.appendChild(drop); }
+  inp.addEventListener('input', () => {
+    const v = inp.value.trim().toUpperCase();
+    if (!v) { drop.style.display='none'; return; }
+    const hits = list.filter(x => x.toUpperCase().includes(v)).slice(0,8);
+    if (!hits.length) { drop.style.display='none'; return; }
+    drop.innerHTML = hits.map(h=>`<div class="ac-item">${h}</div>`).join('');
+    drop.style.display='block';
+    drop.querySelectorAll('.ac-item').forEach(el=>el.addEventListener('click',()=>{ inp.value=el.textContent; drop.style.display='none'; inp.dispatchEvent(new Event('change')); }));
+  });
+  document.addEventListener('click', e=>{ if(!wrap.contains(e.target)) drop.style.display='none'; });
+}
+
+// ── Format Nomor Renbang ────────────────────────────────────────
+function noRBG() {
+  const yr = new Date().getFullYear();
+  return `RBG-${yr}-${String(noRenbang).padStart(3,'0')}`;
+}
+
+// ── Tambah blok sortie ─────────────────────────────────────────
+function addBlock() {
+  blockCount++;
+  const id = blockCount;
+  const div = document.createElement('div');
+  div.className='sortie-block'; div.id=`rb-${id}`;
+  div.innerHTML=`
+    <div class="sortie-block-title">Rencana Sortie ${id} — <span class="no-renbang">${noRBG()}</span></div>
+    <button class="del-btn" onclick="delBlock(${id})">✕</button>
+    <label>Nomor Pesawat <span class="req">*</span></label>
+    <div class="ac-wrap">
+      <input type="text" id="rb-kode-${id}" placeholder="Contoh: HA-5182" style="text-transform:uppercase"
+             oninput="autoJenis(${id})">
+    </div>
+    <label>Jenis Pesawat <span class="auto-tag">AUTO</span></label>
+    <input type="text" id="rb-jenis-${id}" placeholder="Otomatis dari Kode" readonly style="background:#f0f0f0;color:var(--muted)">
+    <label>Satuan yang Dilayani <span class="req">*</span></label>
+    <div class="ac-wrap">
+      <input type="text" id="rb-satuan-${id}" placeholder="Pilih atau ketik nama satuan" style="text-transform:uppercase">
+    </div>
+    <label>Rute Penerbangan <span class="req">*</span></label>
+    <div id="rb-rute-${id}">
+      <div class="rute-row"><input type="text" placeholder="Asal" class="rb-rute-inp" style="text-transform:uppercase"><span style="color:var(--muted);font-size:11px;white-space:nowrap">Asal</span></div>
+      <div class="rute-row"><input type="text" placeholder="Tujuan 1" class="rb-rute-inp" style="text-transform:uppercase"><button class="rute-del" onclick="delRute(this)">×</button></div>
+    </div>
+    <button class="rute-add" onclick="addRute(${id})">＋ Tambah Tujuan</button>
+    <div class="row-2" style="margin-top:10px">
+      <div>
+        <label>Muatan Personel (Pax)</label>
+        <input type="number" id="rb-pax-${id}" placeholder="0" min="0" inputmode="numeric">
+      </div>
+      <div>
+        <label>Alkap (kg)</label>
+        <input type="number" id="rb-alkap-${id}" placeholder="0" min="0" inputmode="numeric">
+      </div>
+    </div>
+    <label>Bamak / Bahan Makanan (kg)</label>
+    <input type="number" id="rb-bamak-${id}" placeholder="0" min="0" inputmode="numeric">
+    <label>Catatan / Prioritas</label>
+    <input type="text" id="rb-cat-${id}" placeholder="Opsional" style="text-transform:uppercase">
+  `;
+  document.getElementById('r-blok-container').appendChild(div);
+  noRenbang++;
+
+  // Pasang autocomplete
+  const kodeEl = document.getElementById(`rb-kode-${id}`);
+  const satuanEl = document.getElementById(`rb-satuan-${id}`);
+  makeAC(kodeEl, Object.keys(MASTER_ASET));
+  makeAC(satuanEl, DAFTAR_SATUAN);
+
+  // Autocomplete rute awal
+  div.querySelectorAll('.rb-rute-inp').forEach(inp => {
+    const w = inp.parentElement; w.classList.add('ac-wrap');
+    makeAC(inp, KEL_LOKASI);
+  });
+}
+
+function delBlock(id) {
+  const el = document.getElementById(`rb-${id}`);
+  if (el) el.remove();
+}
+
+function autoJenis(id) {
+  const kode = document.getElementById(`rb-kode-${id}`).value.trim().toUpperCase();
+  const jenis = MASTER_ASET[kode] || '';
+  document.getElementById(`rb-jenis-${id}`).value = jenis;
+}
+
+function addRute(id) {
+  const container = document.getElementById(`rb-rute-${id}`);
+  const idx = container.querySelectorAll('.rute-row').length;
+  const row = document.createElement('div');
+  row.className='rute-row';
+  row.innerHTML=`<div class="ac-wrap" style="flex:1"><input type="text" placeholder="Tujuan ${idx}" class="rb-rute-inp" style="text-transform:uppercase;width:100%"></div><button class="rute-del" onclick="delRute(this)">×</button>`;
+  container.appendChild(row);
+  makeAC(row.querySelector('.rb-rute-inp'), KEL_LOKASI);
+}
+
+function delRute(btn) {
+  const row = btn.parentElement;
+  const container = row.parentElement;
+  if (container.querySelectorAll('.rute-row').length > 2) row.remove();
+}
+
+// ── Format tanggal ─────────────────────────────────────────────
+function fmtTgl(val) {
+  if (!val) return '⚠KOSONG';
+  const [y,m,d] = val.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+// ── Generate teks WA ──────────────────────────────────────────
+document.getElementById('r-btn-generate').addEventListener('click', generate);
+function generate() {
+  const tgl      = document.getElementById('r-tgl').value;
+  const perencana= document.getElementById('r-perencana').value.trim().toUpperCase() || '⚠KOSONG';
+  const jabatan  = document.getElementById('r-jabatan').value.trim().toUpperCase();
+  const waktu    = new Date().toLocaleString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}).replace(/\./g,'/');
+
+  const blocks = document.querySelectorAll('.sortie-block');
+  if (!blocks.length) { alert('Tambahkan minimal 1 rencana sortie.'); return; }
+
+  const lines = [];
+  lines.push('=== RENCANA PENERBANGAN DORLOG ===');
+  lines.push(`TGL_OPS: ${fmtTgl(tgl)}`);
+  lines.push(`PERENCANA: ${perencana}`);
+  if (jabatan) lines.push(`JABATAN: ${jabatan}`);
+  lines.push(`WAKTU_KIRIM: ${waktu}`);
+  lines.push('');
+
+  blocks.forEach((blk, i) => {
+    const id = blk.id.replace('rb-','');
+    const noRBG_el = blk.querySelector('.no-renbang');
+    const noRBGval = noRBG_el ? noRBG_el.textContent : `RBG-${new Date().getFullYear()}-${String(i+1).padStart(3,'0')}`;
+    const kode  = document.getElementById(`rb-kode-${id}`)?.value.trim().toUpperCase() || '⚠KOSONG';
+    const jenis = document.getElementById(`rb-jenis-${id}`)?.value.trim() || '—';
+    const satuan= document.getElementById(`rb-satuan-${id}`)?.value.trim().toUpperCase() || '⚠KOSONG';
+    const pax   = parseInt(document.getElementById(`rb-pax-${id}`)?.value)||0;
+    const alkap = parseInt(document.getElementById(`rb-alkap-${id}`)?.value)||0;
+    const bamak = parseInt(document.getElementById(`rb-bamak-${id}`)?.value)||0;
+    const cat   = document.getElementById(`rb-cat-${id}`)?.value.trim().toUpperCase() || '-';
+
+    // Rute
+    const ruteInps = blk.querySelectorAll('.rb-rute-inp');
+    const rute = Array.from(ruteInps).map(x=>x.value.trim().toUpperCase()).filter(Boolean);
+    const ruteStr = rute.length ? rute.join(' → ') : '⚠KOSONG';
+
+    lines.push(`--- SORTIE_RENCANA_${i+1} ---`);
+    lines.push(`  NO_RENBANG: ${noRBGval}`);
+    lines.push(`  KODE_PESAWAT: ${kode}`);
+    lines.push(`  JENIS: ${jenis}`);
+    lines.push(`  SATUAN_DILAYANI: ${satuan}`);
+    lines.push(`  RUTE: ${ruteStr}`);
+    lines.push(`  MUATAN_PAX: ${pax}`);
+    lines.push(`  MUATAN_ALKAP_KG: ${alkap}`);
+    lines.push(`  MUATAN_BAMAK_KG: ${bamak}`);
+    lines.push(`  CATATAN: ${cat}`);
+    lines.push('');
+  });
+  lines.push('=== END RENBANG ===');
+
+  const out = lines.join('\n');
+  const el  = document.getElementById('r-output');
+  el.textContent = out; el.style.display='block';
+  document.getElementById('r-btn-copy').classList.remove('hidden');
+  document.getElementById('r-btn-reset').classList.remove('hidden');
+
+  // Cek warning
+  const warnings = [];
+  if (!tgl) warnings.push('Tanggal operasi belum diisi');
+  blocks.forEach((blk,i)=>{
+    const id=blk.id.replace('rb-','');
+    if (!document.getElementById(`rb-kode-${id}`)?.value) warnings.push(`Sortie ${i+1}: Kode pesawat kosong`);
+    if (!document.getElementById(`rb-satuan-${id}`)?.value) warnings.push(`Sortie ${i+1}: Satuan kosong`);
+  });
+  if (warnings.length) alert('⚠ Peringatan:\n'+warnings.join('\n'));
+}
+
+// ── Salin teks ───────────────────────────────────────────────
+document.getElementById('r-btn-copy').addEventListener('click', ()=>{
+  const txt = document.getElementById('r-output').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(()=>alert('✓ Teks berhasil disalin. Buka WA dan paste.'));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=txt; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    alert('✓ Teks disalin.');
+  }
+});
+
+// ── Reset ─────────────────────────────────────────────────────
+document.getElementById('r-btn-reset').addEventListener('click', ()=>{
+  if(!confirm('Reset seluruh form?')) return;
+  document.getElementById('r-blok-container').innerHTML='';
+  document.getElementById('r-tgl').value='';
+  document.getElementById('r-perencana').value='';
+  document.getElementById('r-jabatan').value='';
+  document.getElementById('r-output').style.display='none';
+  document.getElementById('r-btn-copy').classList.add('hidden');
+  document.getElementById('r-btn-reset').classList.add('hidden');
+  blockCount=0; noRenbang=1;
+});
+
+document.getElementById('r-btn-add').addEventListener('click', addBlock);
+
+// Mulai dengan 1 blok default
+addBlock();
+</script>
+</body>
+</html>
